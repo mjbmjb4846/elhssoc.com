@@ -20,4 +20,6 @@ import './Carousel.js';
     <script src="TextBox.js"></script></script>
     <script src="Download.js"></script></script>
     <script src="Carousel.js"></script></script>
+
+    <script src="./index.js"></script>
 */
