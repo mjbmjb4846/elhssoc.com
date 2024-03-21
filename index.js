@@ -15,12 +15,8 @@ class Init extends HTMLElement {
             "Carousel.js"
         ];
 
-        let scripts = this.getAttribute('scripts').split(' ');
-
-        // If the scripts attribute is left blank, load all scripts in the predefined list
-        if (scripts.length === 1 && scripts[0] === "") {
-            scripts = predefinedScripts;
-        }
+        let scripts = this.getAttribute('scripts');
+        scripts = scripts ? scripts.split(' ') : predefinedScripts;
 
         scripts.forEach(script => {
             let scriptElement = document.createElement('script');
