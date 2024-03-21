@@ -38,9 +38,14 @@ class Dropdown extends HTMLElement {
 
     render() {
         const align = this.getAttribute('position') || 'center';
-
-        const df = this.getAttribute('content').replace(/\(\(/g, "<").replace(/\)\)/g, ">").replace(/\'\'/g, '"');
-
+    
+        let content = this.getAttribute('content');
+        if (content) {
+            content = content.replace(/\(\(/g, "<").replace(/\)\)/g, ">").replace(/\'\'/g, '"');
+        } else {
+            content = '<slot></slot>';
+        }
+    
         this.shadowRoot.innerHTML = `
             <style>
                 .title, .content {
@@ -58,12 +63,15 @@ class Dropdown extends HTMLElement {
                 .title {
                     font-weight: bold;
                     font-size: var(--medium-text);
+                    user-select: none;
                 }
                 .content {
                     display: none;
+                    overflow: hidden;
                     font-weight: normal;
                     font-size: var(--normal-text);
                     padding-top: 0;
+                    user-select: text;
                 }
                 .arrow {
                     display: inline-block;
@@ -71,9 +79,9 @@ class Dropdown extends HTMLElement {
                 }
             </style>
             <div class="title">${this.getAttribute('title') || "TITLE"}&nbsp&nbsp&nbsp<span class="arrow">▽</span></div>
-            <div class="content">${df || "DESCRIPTION"}</div>
+            <div class="content">${content}</div>
         `;
-    }
+    }    
 }
 
 window.customElements.define('m-dropdown', Dropdown);

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELHSSOC | Bake Sale</title>
+
+    <link href="./global.css" type="text/css" rel="stylesheet">
+
+    <!-- <script src="spinButton.js"></script>
+    <script src="spacer.js"></script>
+    <script src="Image.js"></script>
+    <script src="Dropdown.js"></script>
+    <script src="Title.js"></script>
+    <script src="Announcement.js"></script>
+    <script src="AltTitle.js"></script>
+    <script src="TextBox.js"></script></script>
+    <script src="Download.js"></script></script>
+    <script src="Carousel.js"></script></script>
+    -->
+    <script src="./index.js"></script>
+    <m-init scripts="Title.js Spacer.js Dropdown.js"></m-init>
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+</head>
+<body>
+
+    <m-spacer height="8vh" color="var(--color-medium)"></m-spacer>
+
+    <m-title background="./images/DALLE2cookies.webp" x="0%" y="50%" zoom="100%">Bake Sale</m-title>
+
+    <m-spacer></m-spacer>
+
+    <m-dropdown title="Bake Sale Information" color="var(--color-light)" position="left">
+        <strong>We are holding a bake sale fundraiser after school on April 4<sup>th</sup> and 5<sup>th</sup> outside the Hub.</strong>
+        <m-spacer></m-spacer>
+        The money will go toward purchases of club materials and end-of-year activities!
+        <m-spacer></m-spacer>
+        If you are interested in helping out at the sale, or can provide a baked good, please access and fill out the form below with your ELPS email address.
+        Your support means a great deal as we round out the season!
+        <br><br>
+        <p style="font-size: small;">Fundraiser approved by ELHS administration</p>
+    </m-dropdown>
+
+    <m-spacer></m-spacer>
+
+    <div class="form-container">
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSegiUma6qlDePVzqI7OPDnhLxVwFAjHJYZ1kYDlyrHmijyojg/viewform?embedded=true" width="700" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+    </div>
+
+    <script>menuInit()</script>
+    
+</body>
+</html>

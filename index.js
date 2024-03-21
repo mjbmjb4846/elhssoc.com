@@ -1,3 +1,40 @@
+// SCRIPT INIT -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+class Init extends HTMLElement {
+    connectedCallback() {
+        const predefinedScripts = [
+            "spinButton.js",
+            "spacer.js",
+            "Image.js",
+            "Dropdown.js",
+            "Title.js",
+            "Announcement.js",
+            "AltTitle.js",
+            "TextBox.js",
+            "Download.js",
+            "Carousel.js"
+        ];
+
+        let scripts = this.getAttribute('scripts').split(' ');
+
+        // If the scripts attribute is left blank, load all scripts in the predefined list
+        if (scripts.length === 1 && scripts[0] === "") {
+            scripts = predefinedScripts;
+        }
+
+        scripts.forEach(script => {
+            let scriptElement = document.createElement('script');
+            scriptElement.src = script;
+            scriptElement.onerror = () => console.error(`Failed to load script: ${script}`);
+            this.appendChild(scriptElement);
+        });
+    }
+}
+
+customElements.define('m-init', Init);
+
+// MENU INIT -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
 function menuInit() {
     // Create the menu in one function command so that it doesn't need to be rewritten on every page:
     let menu = document.createElement('div');
@@ -55,6 +92,8 @@ function menuInit() {
 
     document.body.appendChild(button); // Add the button to the webpage
 }
+
+// UTILITIES -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
 function format(input, preset) {
     let output = input;

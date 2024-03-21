@@ -13,6 +13,7 @@ class SpinButton extends HTMLElement {
         const color = this.getAttribute('color');
         const ionIcon = this.getAttribute('ionIcon');
         const text = this.getAttribute('text');
+        const target = "_" + this.getAttribute('target') || 'blank';
 
         this.shadowRoot.innerHTML = `
             <style>
@@ -87,6 +88,7 @@ class SpinButton extends HTMLElement {
         `;
 
         this.shadowRoot.querySelector('.button').href = link;
+        this.shadowRoot.querySelector('.button').target = target;
         this.shadowRoot.querySelector('.boxText').textContent = text;
         this.shadowRoot.querySelector('.boxText').style.color = color;
         this.shadowRoot.querySelector('.boxIcon').style.backgroundColor = color;
