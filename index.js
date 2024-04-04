@@ -120,6 +120,22 @@ function getVH(percent = 100) {
     return window.innerHeight * (percent / 100);
 }
 
+async function readJson(file) {
+    try {
+        const response = await fetch(file);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(data);
+        return data;
+    } catch (error) {
+        console.error('The file did not fetch:', error);
+    }
+}
+
+// STYLING -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
 /*window.onscroll = function() {
     // Whenever the user scrolls (page update), run the following code:
 
