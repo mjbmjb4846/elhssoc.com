@@ -109,13 +109,13 @@ function format(input, preset) {
 }
 
 function getVW(percent = 100) {
-    //Find the CSS property for Viewport Width (vw):
+    // Find the CSS property for Viewport Width (vw):
 
     return window.innerWidth * (percent / 100);
 }
 
 function getVH(percent = 100) {
-    //Find the CSS property for Viewport Height (vh):
+    // Find the CSS property for Viewport Height (vh):
 
     return window.innerHeight * (percent / 100);
 }
@@ -131,6 +131,40 @@ async function readJson(file) {
         return data;
     } catch (error) {
         console.error('The file did not fetch:', error);
+    }
+}
+
+function oppHex(hex, returnType) {
+    // Compute the opposite hex code
+
+    let map = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"]
+    let chars = hex.toUpperCase().split('');
+    let startPos = 0;
+    // Compute to Base 16
+    for (let i = 0; i < chars.length; i ++) {
+        if (map.indexOf(chars[i]) != -1) {
+            chars[i] = map.indexOf(chars[i]);
+        } else {
+            startPos = i + 1;
+        }
+    }
+    // Structure Base 16 Numbers to Opposite Values
+    for (let i = startPos; i < chars.length; i += 2) {
+        chars[i] = 240 - chars[i] * 16;
+        chars[i + 1] = 15 - chars[i + 1];
+    }
+    if (returnType === "rgb") {
+        for (let i = chars.length - 2; i >= startPos; i -= 2) {
+            chars[i] += chars[i + 1];
+            chars.splice(i + 1, 1);
+        }
+        chars.splice(0, startPos);
+    } else {
+        for (let i = startPos; i < chars.length; i += 2) {
+            chars[i] = map[chars[i] / 16];
+            chars[i + 1] = map[chars[i + 1]];
+        }
+        return chars.join('');
     }
 }
 
