@@ -6,6 +6,7 @@ class Title extends HTMLElement {
 
     connectedCallback() {
         this.render();
+        this.addParallaxEffect();
     }
 
     render() {
@@ -48,6 +49,16 @@ class Title extends HTMLElement {
             </style>
             <div class="title-text"><slot></slot></div>
         `;
+    }
+
+    addParallaxEffect() {
+        if (this.getAttribute('speed')) {
+            const speed = this.getAttribute('speed');
+            window.addEventListener('scroll', () => {
+                const scrollTop = document.documentElement.scrollTop;
+                this.style.backgroundPosition = `center calc(50% - ${scrollTop * speed}px)`;
+            });
+        }
     }
 }
 
