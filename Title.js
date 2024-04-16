@@ -11,7 +11,7 @@ class Title extends HTMLElement {
     render() {
         const background = this.getAttribute('background');
         const backgroundColor = this.getAttribute('background-color') || 'var(--color-dark)';
-        const textColor = this.getAttribute('text-color') || 'var(--white)';
+        const textColor = this.getAttribute('text-color') || '#ffffff';
         const brightness = this.getAttribute('brightness') || 0.6;
         const height = this.getAttribute('height') || '50vh';
         const x = this.getAttribute('x') || '50%';

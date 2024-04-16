@@ -9,7 +9,7 @@ class TextBox extends HTMLElement {
     }
 
     render() {
-        const textColor = this.getAttribute('text-color') || 'var(--black)';
+        const textColor = this.getAttribute('text-color') || 'var(--text)';
         const color = this.getAttribute('color') || 'var(--white)';
         const format = this.getAttribute('format') || 'left';
 

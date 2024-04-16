@@ -1,6 +1,6 @@
 // SCRIPT INIT -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
-class Init extends HTMLElement {
+class Init extends HTMLElement { // Not Supported on Github Pages
     connectedCallback() {
         const predefinedScripts = [
             "spinButton.js",
@@ -166,6 +166,17 @@ function oppHex(hex, returnType) {
         }
         return chars.join('');
     }
+}
+
+function toImage(canvas, imageFormat = 'image/png') {
+    let imageData = canvas.toDataURL(imageFormat);
+    let image = new Image();
+    image.src = imageData;
+    return image;
+}
+
+function clipboard(data) {
+    navigator.clipboard.write(data);
 }
 
 // STYLING -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --

@@ -10,7 +10,7 @@ class Announcement extends HTMLElement {
 
     render() {
         const color = this.getAttribute('color') || 'var(--color-light)';
-        const textColor = this.getAttribute('text-color') || 'var(--black)';
+        const textColor = this.getAttribute('text-color') || 'var(--text)';
 
         this.shadowRoot.innerHTML = `
             <style>

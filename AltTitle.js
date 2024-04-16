@@ -10,7 +10,7 @@ class AltTitle extends HTMLElement {
 
     render() {
         const color = this.getAttribute('color') || 'var(--white)';
-        const textColor = this.getAttribute('text-color') || 'var(--black)';
+        const textColor = this.getAttribute('text-color') || 'var(--text)';
         const format = this.getAttribute('format') || 'center';
 
         this.shadowRoot.innerHTML = `

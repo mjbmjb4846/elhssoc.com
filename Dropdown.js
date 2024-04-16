@@ -55,7 +55,7 @@ class Dropdown extends HTMLElement {
                     align-items: center;
                     padding: 30px 40px;
                     justify-content: ${align};
-                    color: var(--black);
+                    color: var(--text);
                     width: calc(100vw - 80px);
                     background-color: ${this.getAttribute('color') || "var(--white)"};
                     cursor: pointer;

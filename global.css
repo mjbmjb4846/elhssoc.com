@@ -8,6 +8,7 @@
     --color-dark: #282d62;
     --color-dark-gray: #5c5c5c;
     --black: #000000;
+    --text: #000000;
     --discord: #7289da;
     --google: #ff3e30;
     --scioly: #fee372;
@@ -22,6 +23,25 @@
     font-size: 2.5vh;
     font-family: Arial, Helvetica, sans-serif;
 }
+
+/* @media (prefers-color-scheme: dark) {
+    :root {
+        --white: #252525;
+        --color-light-gray: #5c5c5c;
+        --color-light: #282d62;
+        --color-medium: #282d62;
+        --color-dark: #14183a;
+        --color-dark-gray: #333333;
+        --black: #000000;
+        --text: #ffffff;
+        --discord: #000000;
+        --google: #000000;
+        --scioly: #000000;
+        --instagram: #000000;
+
+        background-color: #252525;
+    }
+} */
 
 /*     GENERAL PAGE     */
 
@@ -126,7 +146,7 @@ nav li:hover {
 
 nav a {
     text-align: center;
-    color: var(--white);
+    color: #ffffff;
     font-weight: 100;
     width: 100%;
 }

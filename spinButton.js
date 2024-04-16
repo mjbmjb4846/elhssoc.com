@@ -37,7 +37,7 @@ class SpinButton extends HTMLElement {
                     padding-left: 5%;
                     padding-top: 2px;
                     width: 75%;
-                    color: var(--black);
+                    color: var(--text);
                     font-family: 'Lato', sans-serif;
                     font-weight: 750;
                 }
