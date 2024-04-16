@@ -16,7 +16,7 @@ class Title extends HTMLElement {
         const height = this.getAttribute('height') || '50vh';
         const x = this.getAttribute('x') || '50%';
         const y = this.getAttribute('y') || '50%';
-        const zoom = this.getAttribute('zoom') || '120%';
+        const zoom = this.getAttribute('zoom') || 'cover';
 
         this.shadowRoot.innerHTML = `
             <style>
@@ -42,7 +42,7 @@ class Title extends HTMLElement {
                 }
                 @media screen and (max-width: 480px) {
                     :host {
-                        background-size: auto;
+                        background-size: cover;
                     }
                 }
             </style>
