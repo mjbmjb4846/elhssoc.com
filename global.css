@@ -170,6 +170,14 @@ iframe {
     width: 100%;
 }
 
+.feedback-container{
+    display: flex;
+    margin-right: auto;
+    align-items: left;
+    height:1800px;
+    width: 100%;
+}
+
 /*     BUTTONS (Custom Elements Created)    */
 
 .button-grid {
