@@ -170,6 +170,10 @@ iframe {
     width: 100%;
 }
 
+.no-scroll::-webkit-scrollbar {
+    display: none;
+}
+
 .feedback-container{
     display: flex;
     margin-right: auto;
