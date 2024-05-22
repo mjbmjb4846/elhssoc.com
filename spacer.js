@@ -1,22 +1,47 @@
 class Spacer extends HTMLElement {
-    constructor() {
+    /**
+ * Creates an instance of Spacer Custom HTML Component.
+ *
+ * @constructor
+ */
+constructor() {
         super();
         this.attachShadow({mode: 'open'});
     }
 
-    connectedCallback() {
+    /**
+ * ${1:Description placeholder}
+ */
+connectedCallback() {
         this.render();
     }
 
-    static get observedAttributes() {
+    /**
+ * ${1:Description placeholder}
+ *
+ * @static
+ * @readonly
+ * @type {{}\}
+ */
+static get observedAttributes() {
         return ['width', 'height', 'color'];
     }
 
-    attributeChangedCallback(name, oldValue, newValue) {
+    /**
+ * ${1:Description placeholder}
+ *
+ * @param {*} name
+ * @param {*} oldValue
+ * @param {*} newValue
+ */
+attributeChangedCallback(name, oldValue, newValue) {
         this.render();
     }
 
-    render() {
+    /**
+ * ${1:Description placeholder}
+ */
+render() {
         this.shadowRoot.innerHTML = `
             <style>
                 .spacer {

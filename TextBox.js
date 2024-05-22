@@ -1,14 +1,25 @@
 class TextBox extends HTMLElement {
-    constructor() {
+    /**
+ * Creates an instance of TextBox Custom HTML Component.
+ *
+ * @constructor
+ */
+constructor() {
         super();
         this.attachShadow({ mode: 'open' });
     }
 
-    connectedCallback() {
+    /**
+ * ${1:Description placeholder}
+ */
+connectedCallback() {
         this.render();
     }
 
-    render() {
+    /**
+ * ${1:Description placeholder}
+ */
+render() {
         const textColor = this.getAttribute('text-color') || 'var(--text)';
         const color = this.getAttribute('color') || 'var(--white)';
         const format = this.getAttribute('format') || 'left';

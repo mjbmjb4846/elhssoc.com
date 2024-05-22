@@ -1,14 +1,25 @@
 class Announcement extends HTMLElement {
-    constructor() {
+    /**
+ * Creates an instance of Announcement Custom HTML Component.
+ *
+ * @constructor
+ */
+constructor() {
         super();
         this.attachShadow({ mode: 'open' });
     }
 
-    connectedCallback() {
+    /**
+ * ${1:Description placeholder}
+ */
+connectedCallback() {
         this.render();
     }
 
-    render() {
+    /**
+ * ${1:Description placeholder}
+ */
+render() {
         const color = this.getAttribute('color') || 'var(--color-light)';
         const textColor = this.getAttribute('text-color') || 'var(--text)';
 

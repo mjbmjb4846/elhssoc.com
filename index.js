@@ -1,7 +1,17 @@
 // SCRIPT INIT -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
+/**
+ * Menu Initialization Custom HTML Component
+ *
+ * @class Init
+ * @typedef {Init}
+ * @extends {HTMLElement}
+ */
 class Init extends HTMLElement { // Not Supported on Github Pages
-    connectedCallback() {
+    /**
+ * Creates Menu Selections
+ */
+connectedCallback() {
         const predefinedScripts = [
             "spinButton.js",
             "spacer.js",
@@ -31,6 +41,9 @@ customElements.define('m-init', Init);
 
 // MENU INIT -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
+/**
+ * Creates a Navigation Menu when Called on an HTML Page.
+ */
 function menuInit() {
     // Create the menu in one function command so that it doesn't need to be rewritten on every page:
     let menu = document.createElement('div');
@@ -91,6 +104,13 @@ function menuInit() {
 
 // UTILITIES -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
+/**
+ * Formats MHTML string for use as HTML.
+ *
+ * @param {*} input
+ * @param {*} preset
+ * @returns {*}
+ */
 function format(input, preset) {
     let output = input;
     if (Array.isArray(preset)){
@@ -108,18 +128,37 @@ function format(input, preset) {
     return output;
 }
 
+/**
+ * Returns the Available Width of the Screen.
+ *
+ * @param {number} [percent=100]
+ * @returns {number}
+ */
 function getVW(percent = 100) {
     // Find the CSS property for Viewport Width (vw):
 
     return window.innerWidth * (percent / 100);
 }
 
+/**
+ * Returns the Available Height of the Screen.
+ *
+ * @param {number} [percent=100]
+ * @returns {number}
+ */
 function getVH(percent = 100) {
     // Find the CSS property for Viewport Height (vh):
 
     return window.innerHeight * (percent / 100);
 }
 
+/**
+ * Collects JSON Data from an External JSON File.
+ *
+ * @async
+ * @param {*} file
+ * @returns {unknown}
+ */
 async function readJson(file) {
     try {
         const response = await fetch(file);
@@ -134,6 +173,13 @@ async function readJson(file) {
     }
 }
 
+/**
+ * Returns the Opposite Hex Color to the Input Hex Color.
+ *
+ * @param {*} hex
+ * @param {*} returnType
+ * @returns {*}
+ */
 function oppHex(hex, returnType) {
     // Compute the opposite hex code
 
@@ -168,6 +214,13 @@ function oppHex(hex, returnType) {
     }
 }
 
+/**
+ * Converts HTML Canvas to a PNG Image.
+ *
+ * @param {*} canvas
+ * @param {string} [imageFormat='image/png']
+ * @returns {*}
+ */
 function toImage(canvas, imageFormat = 'image/png') {
     let imageData = canvas.toDataURL(imageFormat);
     let image = new Image();
@@ -175,6 +228,11 @@ function toImage(canvas, imageFormat = 'image/png') {
     return image;
 }
 
+/**
+ * Copies Relevant Data to the Clipboard.
+ *
+ * @param {*} data
+ */
 function clipboard(data) {
     navigator.clipboard.write(data);
 }

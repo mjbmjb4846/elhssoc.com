@@ -1,14 +1,25 @@
 class Download extends HTMLElement {
-    constructor() {
+    /**
+ * Creates an instance of Download Custom HTML Component.
+ *
+ * @constructor
+ */
+constructor() {
       super();
       this.attachShadow({ mode: 'open' });
     }
   
-    connectedCallback() {
+    /**
+ * ${1:Description placeholder}
+ */
+connectedCallback() {
       this.render();
     }
   
-    render() {
+    /**
+ * ${1:Description placeholder}
+ */
+render() {
       const href = this.getAttribute('href');
       const name = this.getAttribute('name') || 'Form';
   

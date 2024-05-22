@@ -1,11 +1,19 @@
-class MCarousel extends HTMLElement {
-    constructor() {
+class Carousel extends HTMLElement {
+    /**
+ * Creates an instance of Carousel Custom HTML Component.
+ *
+ * @constructor
+ */
+constructor() {
       super();
       this.images = [];
       this.currentIndex = 0;
     }
   
-    connectedCallback() {
+    /**
+ * ${1:Description placeholder}
+ */
+connectedCallback() {
       this.innerHTML = `
         <div class="carousel-container">
           <img id="carousel-image" src="">
@@ -31,21 +39,41 @@ class MCarousel extends HTMLElement {
       this.carouselImage.style.height = this.getAttribute('height') || '100%';
     }
   
-    showNextImage() {
+    /**
+ * ${1:Description placeholder}
+ */
+showNextImage() {
       this.currentIndex = (this.currentIndex + 1) % this.images.length;
       this.showImage();
     }
   
-    showPrevImage() {
+    /**
+ * ${1:Description placeholder}
+ */
+showPrevImage() {
       this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
       this.showImage();
     }
   
-    static get observedAttributes() {
+    /**
+ * ${1:Description placeholder}
+ *
+ * @static
+ * @readonly
+ * @type {{}\}
+ */
+static get observedAttributes() {
       return ['images', 'width', 'height'];
     }
   
-    attributeChangedCallback(name, oldValue, newValue) {
+    /**
+ * ${1:Description placeholder}
+ *
+ * @param {*} name
+ * @param {*} oldValue
+ * @param {*} newValue
+ */
+attributeChangedCallback(name, oldValue, newValue) {
       if (name === 'images') {
         this.images = JSON.parse(newValue);
         this.showImage();
@@ -53,4 +81,4 @@ class MCarousel extends HTMLElement {
     }
   }
   
-  customElements.define('m-carousel', MCarousel);  
+  customElements.define('m-carousel', Carousel);  

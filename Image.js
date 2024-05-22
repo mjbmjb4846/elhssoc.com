@@ -1,14 +1,25 @@
 class Image extends HTMLElement {
-    constructor() {
+    /**
+ * Creates an instance of Image Custom HTML Component.
+ *
+ * @constructor
+ */
+constructor() {
         super();
         this.attachShadow({ mode: 'open' });
     }
 
-    connectedCallback() {
+    /**
+ * ${1:Description placeholder}
+ */
+connectedCallback() {
         this.render();
     }
 
-    render() {
+    /**
+ * ${1:Description placeholder}
+ */
+render() {
         const src = this.getAttribute('src');
         const alt = this.getAttribute('alt') || "An Image";
         const width = this.getAttribute('width') || "100%";

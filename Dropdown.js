@@ -1,10 +1,18 @@
 class Dropdown extends HTMLElement {
-    constructor() {
+    /**
+ * Creates an instance of Dropdown Custom HTML Component.
+ *
+ * @constructor
+ */
+constructor() {
         super();
         this.attachShadow({ mode: 'open' });
     }
 
-    connectedCallback() {
+    /**
+ * ${1:Description placeholder}
+ */
+connectedCallback() {
         this.render();
         this.shadowRoot.querySelector('.title').addEventListener('click', () => {
             const content = this.shadowRoot.querySelector('.content');
@@ -26,17 +34,34 @@ class Dropdown extends HTMLElement {
         });
     }
 
-    static get observedAttributes() {
+    /**
+ * ${1:Description placeholder}
+ *
+ * @static
+ * @readonly
+ * @type {{}\}
+ */
+static get observedAttributes() {
         return ['position'];
     }
 
-    attributeChangedCallback(name, oldValue, newValue) {
+    /**
+ * ${1:Description placeholder}
+ *
+ * @param {*} name
+ * @param {*} oldValue
+ * @param {*} newValue
+ */
+attributeChangedCallback(name, oldValue, newValue) {
         if (name === 'position') {
             this.render();
         }
     }
 
-    render() {
+    /**
+ * ${1:Description placeholder}
+ */
+render() {
         const align = this.getAttribute('position') || 'center';
     
         let content = this.getAttribute('content');

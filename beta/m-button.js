@@ -1,14 +1,25 @@
 class MButton extends HTMLElement {
-    constructor() {
+    /**
+ * Creates an instance of MButton.
+ *
+ * @constructor
+ */
+constructor() {
         super();
         this.attachShadow({ mode: 'open' });
     }
 
-    connectedCallback() {
+    /**
+ * ${1:Description placeholder}
+ */
+connectedCallback() {
         this.render();
     }
 
-    render() {
+    /**
+ * ${1:Description placeholder}
+ */
+render() {
         const partial = this.getAttribute('scale') || 1;
         const gap = this.getAttribute('gap') || '0px';
         const link = this.getAttribute('link') || 'about:blank';

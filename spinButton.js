@@ -1,14 +1,25 @@
 class SpinButton extends HTMLElement {
-    constructor() {
+    /**
+ * Creates an instance of SpinButton Custom HTML Component.
+ *
+ * @constructor
+ */
+constructor() {
         super();
         this.attachShadow({ mode: 'open' });
     }
 
-    connectedCallback() {
+    /**
+ * ${1:Description placeholder}
+ */
+connectedCallback() {
         this.render();
     }
 
-    render() {
+    /**
+ * ${1:Description placeholder}
+ */
+render() {
         const link = this.getAttribute('link') || "about:blank";
         const color = this.getAttribute('color');
         const ionIcon = this.getAttribute('ionIcon');

@@ -1,14 +1,25 @@
 class AltTitle extends HTMLElement {
-    constructor() {
+    /**
+ * Creates an instance of AltTitle Custom HTML Component.
+ *
+ * @constructor
+ */
+constructor() {
         super();
         this.attachShadow({ mode: 'open' });
     }
 
-    connectedCallback() {
+    /**
+ * ${1:Description placeholder}
+ */
+connectedCallback() {
         this.render();
     }
 
-    render() {
+    /**
+ * ${1:Description placeholder}
+ */
+render() {
         const color = this.getAttribute('color') || 'var(--white)';
         const textColor = this.getAttribute('text-color') || 'var(--text)';
         const format = this.getAttribute('format') || 'center';

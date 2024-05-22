@@ -1,15 +1,26 @@
 class Title extends HTMLElement {
-    constructor() {
+    /**
+ * Creates an instance of Title Custom HTML Component.
+ *
+ * @constructor
+ */
+constructor() {
         super();
         this.attachShadow({ mode: 'open' });
     }
 
-    connectedCallback() {
+    /**
+ * ${1:Description placeholder}
+ */
+connectedCallback() {
         this.render();
         this.addParallaxEffect();
     }
 
-    render() {
+    /**
+ * ${1:Description placeholder}
+ */
+render() {
         const background = this.getAttribute('background');
         const backgroundColor = this.getAttribute('background-color') || 'var(--color-dark)';
         const textColor = this.getAttribute('text-color') || '#ffffff';
@@ -51,7 +62,10 @@ class Title extends HTMLElement {
         `;
     }
 
-    addParallaxEffect() {
+    /**
+ * ${1:Description placeholder}
+ */
+addParallaxEffect() {
         if (this.getAttribute('speed')) {
             const speed = this.getAttribute('speed');
             window.addEventListener('scroll', () => {
