@@ -74,6 +74,16 @@ a {
     justify-content: flex-start;
 }
 
+/* .slidedown {
+    animation-name: SlideIndown;
+    animation-duration: 1s;
+    animation-timing-function:ease-in-out;
+    animation-delay:0s;
+    animation-direction:normal;
+    animation-fill-mode:none;
+}
+ */
+
 /*     TEXT BLOCKS (Moved to Custom Elements)     */
 
 /*     NAVIGATION MENU     */
@@ -260,4 +270,18 @@ iframe {
     .form-container {
         width: 100vw;
     }
+}
+
+/* ANIMATIONS */
+
+@keyframes SlideIndown{
+    from{
+        transform: translateY(-1000px);
+    }
+
+    to{
+        transform: translateY(0px);
+    }
+
+
 }
