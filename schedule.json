@@ -1,0 +1,16 @@
+[
+    {
+        "start": "2024-06-01",
+        "end": "2024-06-08",
+        "color": "var(--color-light)",
+        "textColor": "var(--text)",
+        "text": "Great season everyone! Get ready for <i>Summer Study</i> sessions"
+    },
+    {
+        "start": "2024-06-09",
+        "end": "2024-06-13",
+        "color": "var(--color-light)",
+        "textColor": "var(--text)",
+        "text": "Our first <i>Summer Study</i> meeting is this week! See you at ELPL!"
+    }
+]
