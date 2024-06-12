@@ -1,16 +1,58 @@
 [
     {
+        "hide": true,
         "start": "2024-06-01",
         "end": "2024-06-08",
         "color": "var(--color-light)",
         "textColor": "var(--text)",
-        "text": "Great season everyone! Get ready for <i>Summer Study</i> sessions"
+        "text": "Great season everyone! Get ready for <i>Summer Study</i> sessions",
+        "priority": 3
     },
     {
+        "hide": false,
         "start": "2024-06-09",
         "end": "2024-06-13",
         "color": "var(--color-light)",
         "textColor": "var(--text)",
-        "text": "Our first <i>Summer Study</i> meeting is this week! See you at ELPL!"
+        "text": "Our first <i>Summer Study</i> meeting is Thursday at 1:00 PM! See you in the ELPL maker space!",
+        "priority": 1
+    },
+    {
+        "hide": false,
+        "start": "2024-06-11",
+        "end": "2024-08-21",
+        "days": ["Wednesday"],
+        "color": "var(--color-light)",
+        "textColor": "var(--text)",
+        "text": "Our weekly meeting is tomorrow (Thursday) at 1:00 PM! See you in the maker space at ELPL!",
+        "priority": 2
+    },
+    {
+        "hide": false,
+        "start": "2024-09-01",
+        "end": "2024-09-05",
+        "color": "var(--color-light)",
+        "textColor": "var(--text)",
+        "text": "Our first meeting of the school year is on Friday! Hope to see you after school in the media center!",
+        "priority": 1
+    },
+    {
+        "hide": false,
+        "start": "2024-09-05",
+        "end": "2025-06-06",
+        "days": ["Thursday"],
+        "color": "var(--color-light)",
+        "textColor": "var(--text)",
+        "text": "Don't forget, our weekly meeting is tomorrow (Friday) right after school in the ELHS media center!",
+        "priority": 2
+    },
+    {
+        "hide": false,
+        "start": "2024-07-12",
+        "end": "2024-07-25",
+        "color": "var(--color-light)",
+        "textColor": "var(--text)",
+        "text": "ELPL is hosting <a href=\"https://elpl.bibliocommons.com/events/66563d97b7ed963d009a17f9\"><i>Shark Day<i></a> once again this year! Contact <a href=\"mailto:eberling@cityofeastlansing.com\">Dr. B</a> if you can help!",
+        "priority": 1
     }
 ]
