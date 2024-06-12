@@ -1,51 +1,9 @@
-// SCRIPT INIT -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-
-/**
- * Menu Initialization Custom HTML Component
- *
- * @class Init
- * @typedef {Init}
- * @extends {HTMLElement}
- */
-class Init extends HTMLElement { // Not Supported on Github Pages
-    /**
- * Creates Menu Selections
- */
-connectedCallback() {
-        const predefinedScripts = [
-            "spinButton.js",
-            "spacer.js",
-            "Image.js",
-            "Dropdown.js",
-            "Title.js",
-            "Announcement.js",
-            "AltTitle.js",
-            "TextBox.js",
-            "Download.js",
-            "Carousel.js"
-        ];
-
-        let scripts = this.getAttribute('scripts');
-        scripts = scripts ? scripts.split(' ') : predefinedScripts;
-
-        scripts.forEach(script => {
-            let scriptElement = document.createElement('script');
-            scriptElement.src = script;
-            scriptElement.onerror = () => console.error(`Failed to load script: ${script}`);
-            this.appendChild(scriptElement);
-        });
-    }
-}
-
-customElements.define('m-init', Init);
-
 // MENU INIT -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
 /**
  * Creates a Navigation Menu when Called on an HTML Page.
  */
 function menuInit() {
-    // Create the menu in one function command so that it doesn't need to be rewritten on every page:
     let menu = document.createElement('div');
     menu.innerHTML = `<nav>
     <ul>
@@ -61,45 +19,51 @@ function menuInit() {
     const logoLink = document.createElement('a');
     logoLink.href = './index.html';
     const logoSVG = document.createElement('img');
-    // Set the src attribute based on the viewport width
-    if (window.innerWidth > 800) {
-        logoSVG.src = './soLogo.svg'; // Use the large logo for wider screens
+    if (window.innerWidth > 768) {
+        logoSVG.src = './soLogo.svg';
     } else {
-        logoSVG.src = './soLogoSmall.svg'; // Use the small logo for narrower screens
+        logoSVG.src = './soLogoSmall.svg';
     }
     logoLink.classList.add("logoLink");
     logoSVG.classList.add("logoSVG");
 
     logoLink.appendChild(logoSVG);
-    menu.insertBefore(logoLink, menu.firstChild); // Insert the logo link at the beginning of the menu
+    menu.insertBefore(logoLink, menu.firstChild);
 
     menu.classList.add('nav-container');
 
-    // Add a click event listener to each list item
     const listItems = menu.querySelectorAll('li');
     listItems.forEach((item) => {
-        item.addEventListener('click', () => {
-            // Handle the click action here (e.g., navigate to the link)
+        item.addEventListener('click', async () => {
             const link = item.querySelector('a');
             if (link) {
-                window.location.href = link.getAttribute('href');
+                let href = link.getAttribute('href');
+                try {
+                    // Try fetching the page without the .html extension
+                    let response = await fetch(href.replace('.html', ''));
+                    if (response.ok) {
+                        // If the fetch was successful, update the href
+                        href = href.replace('.html', '');
+                    }
+                } catch (error) {
+                    // If the fetch failed, keep the original href
+                }
+                window.location.href = href;
             }
         });
     });
 
-    document.body.appendChild(menu); // Add the menu to the webpage
+    document.body.appendChild(menu);
 
-    // Create a button to show and hide the menu when on a mobile device
     let button = document.createElement('div');
-    button.innerHTML = 'Menu';
+    button.innerHTML = '<ion-icon name="menu"></ion-icon>';
     button.classList.add('nav-open');
 
-    // Add an event listener to the button to toggle the menu display
     button.addEventListener('click', function() {
         menu.classList.toggle('in');
     });
 
-    document.body.appendChild(button); // Add the button to the webpage
+    document.body.appendChild(button);
 }
 
 // UTILITIES -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --

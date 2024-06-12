@@ -109,18 +109,20 @@ a {
 
 .nav-open {
     display: none;
-    outline: 4px solid var(--black);
-    border-radius: 0 0 0 15px;
-    color: var(--white);
-    background-color: var(--color-dark);
     position: fixed;
     top: 0;
-    right: 0;
-    width: calc(8vh - 4px);
-    height: calc(8vh - 4px);
+    left: 0;
+    color: var(--white);
+    font-size: 8vh;
+    width: 8vh;
+    height: 8vh;
+    overflow: visible;
+    /* border-radius: 0 0 15px 0;
+    color: var(--white);
+    background-color: var(--color-dark);
     text-align: center;
     vertical-align: middle;
-    line-height: 8vh; 
+    line-height: 8vh; */
 }
 
 .nav-open:hover {
@@ -159,6 +161,7 @@ nav a {
     color: #ffffff;
     font-weight: 100;
     width: 100%;
+    pointer-events: none;
 }
 
 /*     EMBEDS     */
@@ -206,6 +209,10 @@ iframe {
 /*     MOBILE     */
 
 @media (max-width: 768px) {
+    .computer-only {
+        display: none;
+    }
+
     .nav-container {
         display: flex;
         flex-direction: column;

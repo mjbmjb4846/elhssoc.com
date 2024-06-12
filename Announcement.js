@@ -64,7 +64,7 @@ class Announcement extends HTMLElement {
 
         // Filter announcements by date and day
         const todayAnnouncements = this.schedule.filter(announcement =>
-            (announcement.start <= currentDateString && announcement.end >= currentDateString && !announcement.hide) &&
+            (announcement.start <= currentDateString && announcement.end >= currentDateString && !announcement.hide && announcement.type === "a") &&
             (!announcement.days || announcement.days.includes(currentDay))
         );
 
