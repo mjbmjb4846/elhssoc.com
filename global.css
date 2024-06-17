@@ -21,22 +21,22 @@
     --large-text: 6vh;
 }
 
-/* @media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) {
     :root {
         --white: #252525;
         --color-light-gray: #5c5c5c;
-        --color-light: #282d62;
+        --color-light: #43498c;
         --color-medium: #282d62;
         --color-dark: #14183a;
         --color-dark-gray: #333333;
         --black: #000000;
         --text: #ffffff;
-        --discord: #000000;
-        --google: #000000;
-        --scioly: #000000;
-        --instagram: #000000;
+        --discord: hsl(227, 59%, 20%);
+        --google: hsl(4, 100%, 14%);
+        --scioly: hsl(48, 99%, 27%);
+        --instagram: hsl(276, 51%, 2%);
     }
-} */
+}
 
 /*     GENERAL PAGE     */
 

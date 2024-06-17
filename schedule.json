@@ -10,7 +10,7 @@
         "priority": 3
     },
     {
-        "hide": false,
+        "hide": true,
         "type": "a",
         "start": "2024-06-09",
         "end": "2024-06-13",
@@ -24,10 +24,32 @@
         "type": "a",
         "start": "2024-06-11",
         "end": "2024-08-21",
+        "days": ["Sunday", "Monday", "Tuesday"],
+        "color": "var(--color-light)",
+        "textColor": "var(--text)",
+        "text": "We are meeting this week on Thursday at 1:00 PM in the maker space at ELPL!",
+        "priority": 2
+    },
+    {
+        "hide": false,
+        "type": "a",
+        "start": "2024-06-11",
+        "end": "2024-08-21",
         "days": ["Wednesday"],
         "color": "var(--color-light)",
         "textColor": "var(--text)",
         "text": "Our weekly meeting is tomorrow (Thursday) at 1:00 PM! See you in the maker space at ELPL!",
+        "priority": 2
+    },
+    {
+        "hide": false,
+        "type": "a",
+        "start": "2024-06-11",
+        "end": "2024-08-21",
+        "days": ["Wednesday"],
+        "color": "var(--color-light)",
+        "textColor": "var(--text)",
+        "text": "We are meeting today at 1:00 PM! See you in the ELPL maker space!",
         "priority": 2
     },
     {
@@ -60,5 +82,40 @@
         "textColor": "var(--text)",
         "text": "ELPL is hosting <a href=\"https://elpl.bibliocommons.com/events/66563d97b7ed963d009a17f9\"><i>Shark Day<i></a> once again this year! Contact <a href=\"mailto:eberling@cityofeastlansing.com\">Dr. B</a> if you can help!",
         "priority": 1
+    },
+    {
+        "hide": true,
+        "type": "tournament",
+        "color": "lime",
+        "text": "Example Tournament",
+        "location": "Example Location",
+        "when": "Example Date/Time",
+        "who": "Everyone",
+        "end": "2024-12-31",
+        "link": "https://elhssoc.com/",
+        "prepare": "Example Things to Prepare",
+        "cost": "Example Price"
+    },
+    {
+        "hide": false,
+        "type": "meeting",
+        "color": "var(--color-light)",
+        "text": "Weekly Meetings",
+        "location": "East Lansing Public Library",
+        "when": "Thursdays in Summer",
+        "who": "SOC Members new and old!",
+        "end": "2024-08-22"
+    },
+    {
+        "hide": false,
+        "type": "event",
+        "color": "var(--color-light-gray)",
+        "text": "Shark Day!",
+        "location": "East Lansing Public Library Maker Space",
+        "when": "July 25, 2024 10:00 AM",
+        "prepare": "Email Dr. B if you are interested in volunteering!",
+        "link": "https://elpl.bibliocommons.com/events/66563d97b7ed963d009a17f9",
+        "end": "2024-07-25"
     }
+
 ]
