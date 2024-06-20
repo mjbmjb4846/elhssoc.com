@@ -19,7 +19,7 @@ class InfoCard extends HTMLElement {
                 :host {
                     display: block;
                     position: relative;
-                    margin: 5px 40px;
+                    margin: 0px 40px;
                     cursor: pointer;
                     font-family: Arial, sans-serif;
                 }
@@ -72,12 +72,13 @@ class InfoCard extends HTMLElement {
                     text-decoration: underline;
                 }
             </style>
+            <div style="height: 5px;"></div>
             <div class="name-role">${role}: ${name}</div>
             <div class="card">
-                <!--<div class="name-role">${role}: ${name}</div>-->
                 <div class="email">Email: <a href="mailto:${email}">${email}</a></div>
                 ${bio ? `<div class=bio>Bio: ${bio}</div>` : ""}
             </div>
+            <div style="height: 5px;"></div>
         `;
 
         this.addEventListener('mouseenter', this.showCard.bind(this));

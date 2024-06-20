@@ -36,6 +36,10 @@
         --scioly: hsl(48, 99%, 27%);
         --instagram: hsl(276, 51%, 2%);
     }
+
+    .gform {
+        filter: invert(0.86) hue-rotate(180deg);
+    }
 }
 
 /*     GENERAL PAGE     */
@@ -181,6 +185,10 @@ iframe {
     align-items: center;
     height: 1800px; /* May Adjust per Use */
     width: 100%;
+}
+
+.alex-container {
+    height: 600px
 }
 
 .no-scroll::-webkit-scrollbar {

@@ -116,6 +116,15 @@
         "prepare": "Email Dr. B if you are interested in volunteering!",
         "link": "https://elpl.bibliocommons.com/events/66563d97b7ed963d009a17f9",
         "end": "2024-07-25"
+    },
+    {
+        "hide": false,
+        "type": "tournament",
+        "color": "maroon",
+        "text": "No Remaining Tournaments!",
+        "location": "Come to our Summer Study Meetings!",
+        "when": "The 2025 Season will Arrive Faster than you Think!",
+        "end": "2024-08-31"
     }
 
 ]
