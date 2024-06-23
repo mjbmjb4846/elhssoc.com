@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Fun Bouncing Ball Physics Game</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #1a1a2e; }
+        canvas { display: block; }
+        #info { position: absolute; top: 10px; left: 10px; color: #fff; font-family: Arial, sans-serif; background-color: rgba(0,0,0,0.5); padding: 5px; border-radius: 5px; }
+        #toolSelector { position: absolute; top: 10px; right: 10px; }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <div id="info"></div>
+    <select id="toolSelector">
+        <option value="scribble">Scribble</option>
+        <option value="line">Straight Line</option>
+    </select>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const info = document.getElementById('info');
+        const toolSelector = document.getElementById('toolSelector');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let ball = { x: 100, y: 100, radius: 10, vx: 0, vy: 0 };
+        let goal = { x: 0, y: 0, radius: 20 };
+        let lines = [];
+        let barriers = [];
+        let bouncePad = { x: 0, y: canvas.height - 20, width: canvas.width, height: 20 };
+        let isDrawing = false;
+        let startTime = Date.now();
+        let strokes = 0;
+        let currentPath = [];
+
+        const bounceFactor = -1.2;
+        const barrierSize = 50;
+        const gravity = 0.2;
+        const friction = 0.99;
+        const restThreshold = 0.1;
+
+        function randomGoal() {
+            goal.x = Math.random() * (canvas.width - 40) + 20;
+            goal.y = Math.random() * (canvas.height - 100) + 20;
+        }
+
+        function createBarriers() {
+            barriers = [];
+            const numBarriers = Math.floor(Math.random() * 5) + 1;
+            for (let i = 0; i < numBarriers; i++) {
+                barriers.push({
+                    x: Math.random() * (canvas.width - barrierSize),
+                    y: Math.random() * (canvas.height - 100 - barrierSize),
+                    size: barrierSize
+                });
+            }
+        }
+
+        function drawBall() {
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#ff6b6b';
+            ctx.fill();
+            ctx.strokeStyle = '#c44d56';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        function drawGoal() {
+            ctx.beginPath();
+            ctx.arc(goal.x, goal.y, goal.radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#4ecdc4';
+            ctx.fill();
+            ctx.strokeStyle = '#45b7aa';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        function drawLines() {
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.lineWidth = 3;
+
+            lines.forEach(line => {
+                if (Array.isArray(line)) {
+                    // Scribble
+                    ctx.beginPath();
+                    ctx.moveTo(line[0].x, line[0].y);
+                    for (let i = 1; i < line.length; i++) {
+                        ctx.lineTo(line[i].x, line[i].y);
+                    }
+                    ctx.stroke();
+                } else {
+                    // Straight line
+                    ctx.beginPath();
+                    ctx.moveTo(line.x1, line.y1);
+                    ctx.lineTo(line.x2, line.y2);
+                    ctx.stroke();
+                }
+            });
+        }
+
+        function drawBouncePad() {
+            ctx.fillStyle = '#feca57';
+            ctx.fillRect(bouncePad.x, bouncePad.y, bouncePad.width, bouncePad.height);
+            ctx.strokeStyle = '#ff9ff3';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(bouncePad.x, bouncePad.y, bouncePad.width, bouncePad.height);
+        }
+
+        function drawBarriers() {
+            ctx.fillStyle = '#54a0ff';
+            barriers.forEach(barrier => {
+                ctx.fillRect(barrier.x, barrier.y, barrier.size, barrier.size);
+                ctx.strokeStyle = '#5f27cd';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(barrier.x, barrier.y, barrier.size, barrier.size);
+            });
+        }
+
+        function update() {
+            if (Math.abs(ball.vy) > restThreshold || !isOnSurface()) {
+                ball.vy += gravity;
+            } else {
+                ball.vy = 0;
+                ball.vx *= friction;
+            }
+
+            ball.x += ball.vx;
+            ball.y += ball.vy;
+
+            checkWallCollision();
+            checkBarrierCollision();
+            checkBouncePadCollision();
+            checkLineCollision();
+
+            const dx = ball.x - goal.x;
+            const dy = ball.y - goal.y;
+            if (Math.sqrt(dx * dx + dy * dy) < ball.radius + goal.radius) {
+                const time = ((Date.now() - startTime) / 1000).toFixed(2);
+                alert(`🎉 Goal reached! Time: ${time}s, Strokes: ${strokes} 🎉`);
+                resetGame();
+            }
+
+            ball.vx *= 0.995;
+            ball.vy *= 0.995;
+        }
+
+        function isOnSurface() {
+            return checkBarrierCollision(true) || checkBouncePadCollision(true);
+        }
+
+        function checkWallCollision() {
+            if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
+                ball.vx *= -0.8;
+                ball.x = ball.x - ball.radius < 0 ? ball.radius : canvas.width - ball.radius;
+            }
+            if (ball.y - ball.radius < 0) {
+                ball.vy *= -0.8;
+                ball.y = ball.radius;
+            }
+        }
+
+        function checkBarrierCollision(checkOnly = false) {
+            let collided = false;
+            barriers.forEach(barrier => {
+                if (ball.x + ball.radius > barrier.x && ball.x - ball.radius < barrier.x + barrier.size &&
+                    ball.y + ball.radius > barrier.y && ball.y - ball.radius < barrier.y + barrier.size) {
+                    collided = true;
+                    if (checkOnly) return;
+
+                    const overlapLeft = (ball.x + ball.radius) - barrier.x;
+                    const overlapRight = (barrier.x + barrier.size) - (ball.x - ball.radius);
+                    const overlapTop = (ball.y + ball.radius) - barrier.y;
+                    const overlapBottom = (barrier.y + barrier.size) - (ball.y - ball.radius);
+
+                    const minOverlap = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
+
+                    if (minOverlap === overlapLeft) {
+                        ball.x = barrier.x - ball.radius;
+                        ball.vx = Math.abs(ball.vx) * -0.8;
+                    } else if (minOverlap === overlapRight) {
+                        ball.x = barrier.x + barrier.size + ball.radius;
+                        ball.vx = Math.abs(ball.vx) * 0.8;
+                    } else if (minOverlap === overlapTop) {
+                        ball.y = barrier.y - ball.radius;
+                        ball.vy = Math.abs(ball.vy) * -0.8;
+                    } else if (minOverlap === overlapBottom) {
+                        ball.y = barrier.y + barrier.size + ball.radius;
+                        ball.vy = Math.abs(ball.vy) * 0.8;
+                    }
+                }
+            });
+            return collided;
+        }
+
+        function checkBouncePadCollision(checkOnly = false) {
+            if (ball.x + ball.radius > bouncePad.x && ball.x - ball.radius < bouncePad.x + bouncePad.width &&
+                ball.y + ball.radius > bouncePad.y) {
+                if (checkOnly) return true;
+
+                ball.y = bouncePad.y - ball.radius;
+                ball.vy *= bounceFactor;
+                ball.vx += (Math.random() - 0.5) * 2;
+                return true;
+            }
+            return false;
+        }
+
+        function checkLineCollision() {
+            lines.forEach(line => {
+                if (Array.isArray(line)) {
+                    // Scribble collision
+                    for (let i = 1; i < line.length; i++) {
+                        checkLineSegmentCollision(line[i-1], line[i]);
+                    }
+                } else {
+                    // Straight line collision
+                    checkLineSegmentCollision(
+                        {x: line.x1, y: line.y1},
+                        {x: line.x2, y: line.y2}
+                    );
+                }
+            });
+        }
+
+        function checkLineSegmentCollision(start, end) {
+            const dx = end.x - start.x;
+            const dy = end.y - start.y;
+            const len = Math.sqrt(dx * dx + dy * dy);
+            const normal = { x: -dy / len, y: dx / len };
+
+            const ballToLineStart = { x: ball.x - start.x, y: ball.y - start.y };
+            const projection = (ballToLineStart.x * dx + ballToLineStart.y * dy) / len;
+
+            if (projection > 0 && projection < len) {
+                const closestPoint = {
+                    x: start.x + (dx * projection) / len,
+                    y: start.y + (dy * projection) / len
+                };
+
+                const distance = Math.sqrt(
+                    Math.pow(ball.x - closestPoint.x, 2) + Math.pow(ball.y - closestPoint.y, 2)
+                );
+
+                if (distance < ball.radius) {
+                    const dot = ball.vx * normal.x + ball.vy * normal.y;
+                    ball.vx = ball.vx - 2 * dot * normal.x;
+                    ball.vy = ball.vy - 2 * dot * normal.y;
+
+                    const pushDistance = ball.radius - distance;
+                    ball.x += normal.x * pushDistance;
+                    ball.y += normal.y * pushDistance;
+
+                    ball.vx *= 0.98;
+                    ball.vy *= 0.98;
+                }
+            }
+        }
+
+        function draw() {
+            ctx.fillStyle = '#1a1a2e';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            drawBarriers();
+            drawBouncePad();
+            drawBall();
+            drawGoal();
+            drawLines();
+
+            info.textContent = `⏱️ Time: ${((Date.now() - startTime) / 1000).toFixed(2)}s | 🖌️ Strokes: ${strokes}`;
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function resetGame() {
+            ball = { x: 100, y: 100, radius: 10, vx: 0, vy: 0 };
+            lines = [];
+            randomGoal();
+            createBarriers();
+            startTime = Date.now();
+            strokes = 0;
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            isDrawing = true;
+            if (lines.length >= 3) {
+                lines.shift();
+            }
+
+            if (toolSelector.value === 'scribble') {
+                currentPath = [{x: mouseX, y: mouseY}];
+                lines.push(currentPath);
+            } else {
+                lines.push({ x1: mouseX, y1: mouseY, x2: mouseX, y2: mouseY });
+            }
+            strokes++;
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isDrawing) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            if (toolSelector.value === 'scribble') {
+                currentPath.push({x: mouseX, y: mouseY});
+            } else {
+                const currentLine = lines[lines.length - 1];
+                currentLine.x2 = mouseX;
+                currentLine.y2 = mouseY;
+            }
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            isDrawing = false;
+            currentPath = [];
+        });
+
+        randomGoal();
+        createBarriers();
+        gameLoop();
+    </script>
+</body>
+</html>

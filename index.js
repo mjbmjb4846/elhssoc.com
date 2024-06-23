@@ -141,41 +141,33 @@ async function readJson(file) {
  * Returns the Opposite Hex Color to the Input Hex Color.
  *
  * @param {*} hex
- * @param {*} returnType
  * @returns {*}
  */
-function oppHex(hex, returnType) {
+function oppHex(hex) {
     // Compute the opposite hex code
-
-    let map = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"]
+    let map = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
     let chars = hex.toUpperCase().split('');
-    let startPos = 0;
+
     // Compute to Base 16
-    for (let i = 0; i < chars.length; i ++) {
-        if (map.indexOf(chars[i]) != -1) {
-            chars[i] = map.indexOf(chars[i]);
-        } else {
-            startPos = i + 1;
+    for (let i = 0; i < chars.length; i++) {
+        let index = map.indexOf(chars[i]);
+        if (index != -1) {
+            chars[i] = index;
         }
     }
+
     // Structure Base 16 Numbers to Opposite Values
-    for (let i = startPos; i < chars.length; i += 2) {
-        chars[i] = 240 - chars[i] * 16;
+    for (let i = 0; i < chars.length; i += 2) {
+        chars[i] = 15 - chars[i];
         chars[i + 1] = 15 - chars[i + 1];
     }
-    if (returnType === "rgb") {
-        for (let i = chars.length - 2; i >= startPos; i -= 2) {
-            chars[i] += chars[i + 1];
-            chars.splice(i + 1, 1);
-        }
-        chars.splice(0, startPos);
-    } else {
-        for (let i = startPos; i < chars.length; i += 2) {
-            chars[i] = map[chars[i] / 16];
-            chars[i + 1] = map[chars[i + 1]];
-        }
-        return chars.join('');
+
+    // Convert back to hex
+    for (let i = 0; i < chars.length; i++) {
+        chars[i] = map[chars[i]];
     }
+
+    return chars.join('');
 }
 
 /**
@@ -200,6 +192,21 @@ function toImage(canvas, imageFormat = 'image/png') {
 function clipboard(data) {
     navigator.clipboard.write(data);
 }
+
+/**
+ * Waits for a keypress.
+ * Executes the input function upon press.
+ *
+ * @param {*} key
+ */
+function onPress(key, func) {
+    window.addEventListener('keydown', function(event) {
+        if (event.key === key) {
+            func();
+        }
+    });
+}
+
 
 // STYLING -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 

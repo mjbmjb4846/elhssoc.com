@@ -1,84 +1,210 @@
-class Carousel extends HTMLElement {
-    /**
- * Creates an instance of Carousel Custom HTML Component.
- *
- * @constructor
- */
-constructor() {
-      super();
-      this.images = [];
-      this.currentIndex = 0;
-    }
-  
-    /**
- * ${1:Description placeholder}
- */
-connectedCallback() {
-      this.innerHTML = `
-        <div class="carousel-container">
-          <img id="carousel-image" src="">
-          <button id="prev-button">Previous</button>
-          <button id="next-button">Next</button>
-        </div>
-      `;
-  
-      this.prevButton = this.querySelector('#prev-button');
-      this.nextButton = this.querySelector('#next-button');
-      this.carouselImage = this.querySelector('#carousel-image');
-  
-      this.prevButton.addEventListener('click', () => this.showPrevImage());
-      this.nextButton.addEventListener('click', () => this.showNextImage());
-  
-      this.showImage();
-    }
-  
-    showImage() {
-      this.carouselImage.src = this.images[this.currentIndex];
-      this.carouselImage.style.objectFit = 'cover';
-      this.carouselImage.style.width = this.getAttribute('width') || '100%';
-      this.carouselImage.style.height = this.getAttribute('height') || '100%';
-    }
-  
-    /**
- * ${1:Description placeholder}
- */
-showNextImage() {
-      this.currentIndex = (this.currentIndex + 1) % this.images.length;
-      this.showImage();
-    }
-  
-    /**
- * ${1:Description placeholder}
- */
-showPrevImage() {
-      this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
-      this.showImage();
-    }
-  
-    /**
- * ${1:Description placeholder}
- *
- * @static
- * @readonly
- * @type {{}\}
- */
-static get observedAttributes() {
-      return ['images', 'width', 'height'];
-    }
-  
-    /**
- * ${1:Description placeholder}
- *
- * @param {*} name
- * @param {*} oldValue
- * @param {*} newValue
- */
-attributeChangedCallback(name, oldValue, newValue) {
+class ImageCarousel extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+    this.currentIndex = 0;
+    this.timer = null;
+    this.images = [];
+  }
+
+  connectedCallback() {
+    this.loadImages();
+  }
+
+  static get observedAttributes() {
+    return ['width', 'height', 'border-width', 'border-color', 'timer', 'images'];
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue !== newValue) {
       if (name === 'images') {
-        this.images = JSON.parse(newValue);
-        this.showImage();
+        this.loadImages();
+      } else {
+        this.render();
+      }
+      if (name === 'timer' && this.timer) {
+        this.startTimer();
       }
     }
   }
-  
-  customElements.define('m-carousel', Carousel);  
+
+  loadImages() {
+    const imagesAttr = this.getAttribute('images');
+    if (!imagesAttr) return;
+
+    if (imagesAttr.includes('.')) {
+      // Individual image files
+      this.images = imagesAttr.split(/\s+/);
+      this.render();
+      this.setupEventListeners();
+      this.startTimer();
+    } else {
+      // Folder path
+      this.loadImagesFromFolder(imagesAttr);
+    }
+  }
+
+  loadImagesFromFolder(folderPath) {
+    // Remove leading slash if present
+    folderPath = folderPath.replace(/^\//, '');
+    
+    // List of common image extensions
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+    
+    // Function to check if a file is an image based on its extension
+    const isImageFile = (filename) => imageExtensions.some(ext => filename.toLowerCase().endsWith(ext));
+
+    // Use the Fetch API to get the directory listing
+    fetch(folderPath)
+      .then(response => response.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const links = Array.from(doc.querySelectorAll('a'));
+        
+        this.images = links
+          .map(link => link.href)
+          .filter(href => isImageFile(href))
+          .map(href => new URL(href, window.location.href).pathname);
+
+        this.render();
+        this.setupEventListeners();
+        this.startTimer();
+      })
+      .catch(error => {
+        console.error('Error loading images from folder:', error);
+        this.images = [];
+        this.render();
+      });
+  }
+
+  render() {
+    const width = this.getAttribute('width') || '100%';
+    const height = this.getAttribute('height') || '400px';
+    const borderWidth = this.getAttribute('border-width') || '0px';
+    const borderColor = this.getAttribute('border-color') || 'var(--color-light)';
+
+    this.shadowRoot.innerHTML = `
+      <style>
+        :host {
+          display: block;
+          width: ${width};
+          height: ${height};
+          position: relative;
+          overflow: hidden;
+        }
+        .carousel-container {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          transition: transform 0.5s ease;
+        }
+        .carousel-item {
+          flex: 0 0 100%;
+          height: 100%;
+        }
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border: ${borderWidth} solid ${borderColor};
+          box-sizing: border-box;
+        }
+        .nav-button {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          background: rgba(0, 0, 0, 0.5);
+          color: white;
+          border: none;
+          padding: 10px;
+          cursor: pointer;
+          font-size: 18px;
+        }
+        .prev { left: 10px; }
+        .next { right: 10px; }
+        .dots-container {
+          position: absolute;
+          bottom: 10px;
+          left: 50%;
+          transform: translateX(-50%);
+          display: flex;
+        }
+        .dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.5);
+          margin: 0 5px;
+          cursor: pointer;
+        }
+        .dot.active {
+          background: white;
+        }
+      </style>
+      <div class="carousel-container">
+        ${this.images.map(src => `<div class="carousel-item"><img src="${src}" alt="Carousel image"></div>`).join('')}
+      </div>
+      <button class="nav-button prev">◀</button>
+      <button class="nav-button next">▶</button>
+      <div class="dots-container">
+        ${this.images.map((_, i) => `<div class="dot${i === 0 ? ' active' : ''}"></div>`).join('')}
+      </div>
+    `;
+    this.updateCarousel();
+  }
+
+  setupEventListeners() {
+    const prevButton = this.shadowRoot.querySelector('.prev');
+    const nextButton = this.shadowRoot.querySelector('.next');
+    const dots = this.shadowRoot.querySelectorAll('.dot');
+
+    prevButton.addEventListener('click', () => this.navigate(-1));
+    nextButton.addEventListener('click', () => this.navigate(1));
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => this.goToSlide(index));
+    });
+  }
+
+  navigate(direction) {
+    this.currentIndex = (this.currentIndex + direction + this.images.length) % this.images.length;
+    this.updateCarousel();
+    this.stopTimer();
+  }
+
+  goToSlide(index) {
+    this.currentIndex = index;
+    this.updateCarousel();
+    this.stopTimer();
+  }
+
+  updateCarousel() {
+    const container = this.shadowRoot.querySelector('.carousel-container');
+    if (container) {
+      container.style.transform = `translateX(-${this.currentIndex * 100}%)`;
+      
+      const dots = this.shadowRoot.querySelectorAll('.dot');
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === this.currentIndex);
+      });
+    }
+  }
+
+  startTimer() {
+    this.stopTimer();
+    const timerDuration = parseInt(this.getAttribute('timer')) || 5000;
+    this.timer = setInterval(() => {
+      this.currentIndex = (this.currentIndex + 1) % this.images.length;
+      this.updateCarousel();
+    }, timerDuration);
+  }
+
+  stopTimer() {
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = null;
+    }
+  }
+}
+
+customElements.define('m-carousel', ImageCarousel);
