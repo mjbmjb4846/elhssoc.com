@@ -8,18 +8,19 @@
 
     <link href="./global.css" type="text/css" rel="stylesheet">
 
-    <script src="spinButton.js"></script>
-    <script src="spacer.js"></script>
-    <script src="Image.js"></script>
-    <script src="Dropdown.js"></script>
-    <script src="Title.js"></script>
-    <script src="Announcement.js"></script>
-    <script src="AltTitle.js"></script>
-    <script src="TextBox.js"></script>
-    <script src="Download.js"></script>
-    <script src="Carousel.js"></script>
-    <script src="InfoCard.js"></script>
-    <script src="UpcomingEvents.js"></script>
+    <script src="m-elements/spinButton.js"></script>
+    <script src="m-elements/spacer.js"></script>
+    <script src="m-elements/Image.js"></script>
+    <script src="m-elements/Dropdown.js"></script>
+    <script src="m-elements/Title.js"></script>
+    <script src="m-elements/Announcement.js"></script>
+    <script src="m-elements/AltTitle.js"></script>
+    <script src="m-elements/TextBox.js"></script>
+    <script src="m-elements/Download.js"></script>
+    <script src="m-elements/Carousel.js"></script>
+    <script src="m-elements/InfoCard.js"></script>
+    <script src="m-elements/UpcomingEvents.js"></script>
+    <script src="m-elements/SpinDropdown.js"></script>
 
     <script src="./index.js"></script>
 
@@ -46,11 +47,6 @@
             <m-info name="Adelina Schenker" role="Treasurer/Test Captain" email="adelina.schenker@stu.elps.us" bio="I don't know someone else make it..."></m-info>
             <m-info name="Newman Liao" role="Build Captain" email="newman.liao@stu.elps.us" bio="One of the website developers!"></m-info>
             
-            <!-- <m-text><strong>President:</strong>&nbsp<a href="mailto:guhyun.jeong@stu.elps.us">Guhyun Jeong</a></m-text>
-            <m-text><strong>Vice President:</strong>&nbsp<a href="mailto:aya.howard@stu.elps.us">Aya Howard</a></m-text>
-            <m-text><strong>Secretary/Lab Captain:</strong>&nbsp<a href="mailto:alex.paddock@stu.elps.us">Alex Paddock</a></m-text>
-            <m-text><strong>Treasurer/Test Captain:</strong>&nbsp<a href="mailto:adelina.schenker@stu.elps.us">Adelina Schenker</a></m-text>
-            <m-text><strong>Build Captain:</strong>&nbsp<a href="mailto:newman.liao@stu.elps.us">Newman Liao</a></m-text> -->
         </div>
         <div class="text-segment" style="margin: 0 40px;">
             <m-spacer height="55px"></m-spacer>
@@ -68,16 +64,13 @@
 
     <m-spacer height="5vh"></m-spacer>
 
-    <m-dropdown title="How do I join?" content="((strong))East Lansing Science Olympiad((/strong)) operates in both division B (middle school) and division C (high school)((br))If you attend ((strong))ELHS((/strong)) or ((strong))Macdonald Middle School((/strong)), talk to your science teachers or ((a href=''mailto:mjbarger531@gmail.com''))email an officer((/a)) for information on how to join!" color="var(--color-light)" position="left
-    
-    "></m-dropdown>
+    <m-drop text="How do I join?" color="var(--color-light)" highlight="#FFFFFF"><strong>East Lansing Science Olympiad</strong> operates in both division B (middle school) and division C (high school). If you attend <strong>ELHS</strong> or <strong>Macdonald Middle School</strong>, talk to your science teachers or <a href='mailto:aya.howard@stu.elps.us'>email an officer</a> for information on how to join!</m-drop>
     <m-spacer color="var(--color-medium)"></m-spacer>
-    <m-dropdown title="What is the club's structure?" content="At ELHSSOC (East Lansing High School Science Olympiad Club), meetings are held almost every week for the entirety of the year.((br))The beauty of having multiple competition teams means that each member has the opportunity to achieve from the club what they are willing to put in!((br))Those with ambitions of rising through the ranks of the state and national tournament may be putting in hours per week on their three or four events while others may decide to take on fewer events in order to work around other activities.((br))((br))At the high school level, ((strong))Science Olympiad is run much like a sport((/strong)), Varsity and JV teams competing most frequently in tournaments from November through May.((br))Along side all the science, however, there are also plenty of fun trips and parties planned throughout the year.((br))((strong))We hope to see you there!((/strong))" color="var(--color-light)" position="left"></m-dropdown>
+    <m-drop text="What is the club's structure?" color="var(--color-light)" highlight="#FFFFFF">At ELHSSOC (East Lansing High School Science Olympiad Club), meetings are held almost every week for the entirety of the year. The beauty of having multiple competition teams means that each member has the opportunity to achieve from the club what they are willing to put in! Those with ambitions of rising through the ranks of the state and national tournament may be putting in hours per week on their three or four events while others may decide to take on fewer events in order to work around other activities. At the high school level, <strong>Science Olympiad is run much like a sport</strong>, Varsity and JV teams competing most frequently in tournaments from November through May. Alongside all the science, however, there are also plenty of fun trips and parties planned throughout the year. <strong>We hope to see you there!</strong></m-drop>
     <m-spacer color="var(--color-medium)"></m-spacer>
-    <m-dropdown title="What does ELHS SOC do outside of tournaments?" content="It's not just the ability to hone our scientific knowledge, nor the prospect of shiny medals, but the community that inspires many of us to keep pushing for more Science Olympiad!((br))((br))Throughout the year, games are scheduled into weekly meetings, field trips are set up for event groups, Celebrations are thrown after tournaments, and so much more!((br))" color="var(--color-light)" position="left"></m-dropdown>
+    <m-drop text="What does ELHS SOC do outside of tournaments?" color="var(--color-light)" highlight="#FFFFFF">It's not just the ability to hone our scientific knowledge, nor the prospect of shiny medals, but the community that inspires many of us to keep pushing for more Science Olympiad! Throughout the year, games are scheduled into weekly meetings, field trips are set up for event groups, Celebrations are thrown after tournaments, and so much more!</m-drop>
     
     <m-spacer height="20vh"></m-spacer>
-    <m-spacer color="var(--color-dark)"></m-spacer>
 
     <script>menuInit()</script>
     
