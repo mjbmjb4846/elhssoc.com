@@ -116,7 +116,7 @@ a {
     position: fixed;
     top: 0;
     left: 0;
-    color: var(--white);
+    color: var(--text);
     font-size: 8vh;
     width: 8vh;
     height: 8vh;
