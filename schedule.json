@@ -1,66 +1,16 @@
 [
-    {
-        "hide": true,
-        "type": "a",
-        "start": "2024-06-01",
-        "end": "2024-06-08",
-        "color": "var(--color-light)",
-        "textColor": "var(--text)",
-        "text": "Great season everyone! Get ready for <i>Summer Study</i> sessions",
-        "priority": 3
-    },
-    {
-        "hide": true,
-        "type": "a",
-        "start": "2024-06-09",
-        "end": "2024-06-13",
-        "color": "var(--color-light)",
-        "textColor": "var(--text)",
-        "text": "Our first <i>Summer Study</i> meeting is Thursday at 1:00 PM! See you in the ELPL maker space!",
-        "priority": 1
-    },
+    {"note": "CURRENT SCHEDULED EVENTS: ALL TYPES", "hide": true},
+
+
     {
         "hide": false,
-        "type": "a",
-        "start": "2024-06-11",
-        "end": "2024-08-21",
-        "days": ["Sunday", "Monday", "Tuesday"],
+        "type": "meeting",
         "color": "var(--color-light)",
-        "textColor": "var(--text)",
-        "text": "We are meeting this week on Thursday at 1:00 PM in the maker space at ELPL!",
-        "priority": 2
-    },
-    {
-        "hide": false,
-        "type": "a",
-        "start": "2024-06-30",
-        "end": "2024-07-04",
-        "color": "var(--color-light)",
-        "textColor": "var(--text)",
-        "text": "🎆 We are NOT meeting this week due to Independence Day! See you next Thursday! 🎆",
-        "priority": 1
-    },
-    {
-        "hide": false,
-        "type": "a",
-        "start": "2024-06-11",
-        "end": "2024-08-21",
-        "days": ["Wednesday"],
-        "color": "var(--color-light)",
-        "textColor": "var(--text)",
-        "text": "Our weekly meeting is tomorrow (Thursday) at 1:00 PM! See you in the maker space at ELPL!",
-        "priority": 2
-    },
-    {
-        "hide": false,
-        "type": "a",
-        "start": "2024-06-11",
-        "end": "2024-08-21",
-        "days": ["Thursday"],
-        "color": "var(--color-light)",
-        "textColor": "var(--text)",
-        "text": "We are meeting today at 1:00 PM! See you in the ELPL maker space!",
-        "priority": 2
+        "text": "Weekly Meetings",
+        "location": "East Lansing High School Media Center",
+        "when": "Fridays During the School Year",
+        "who": "SOC Members and Anyone Interested!",
+        "end": "2025-06-06"
     },
     {
         "hide": false,
@@ -86,6 +36,111 @@
     {
         "hide": false,
         "type": "a",
+        "start": "2024-09-05",
+        "end": "2025-06-06",
+        "days": ["Friday"],
+        "color": "var(--color-light)",
+        "textColor": "var(--text)",
+        "text": "We are meeting today after school in the ELHS media center! Hope to see you there!",
+        "priority": 2
+    },
+
+
+    {"note": "CURRENT PLACEHOLDER EVENTS: ALL TYPES", "hide": true},
+
+
+    {
+        "hide": false,
+        "type": "tournament",
+        "color": "maroon",
+        "text": "No Remaining Tournaments!",
+        "location": "Come to our Summer Study Meetings!",
+        "when": "The 2025 Season will Arrive Faster than you Think!",
+        "end": "2024-08-31"
+    },
+
+
+    {"note": "ARCHIVED EVENTS: ALL TYPES", "hide": true},
+
+
+    {"note": "SUMMER STUDY: ARCHIVED", "hide": true},
+    {
+        "hide": true,
+        "type": "meeting",
+        "color": "var(--color-light)",
+        "text": "Weekly Meetings",
+        "location": "East Lansing Public Library",
+        "when": "Thursdays in Summer",
+        "who": "SOC Members new and old!",
+        "end": "2024-08-22"
+    },
+    {
+        "hide": true,
+        "type": "a",
+        "start": "2024-06-01",
+        "end": "2024-06-08",
+        "color": "var(--color-light)",
+        "textColor": "var(--text)",
+        "text": "Great season everyone! Get ready for <i>Summer Study</i> sessions",
+        "priority": 3
+    },
+    {
+        "hide": true,
+        "type": "a",
+        "start": "2024-06-09",
+        "end": "2024-06-13",
+        "color": "var(--color-light)",
+        "textColor": "var(--text)",
+        "text": "Our first <i>Summer Study</i> meeting is Thursday at 1:00 PM! See you in the ELPL maker space!",
+        "priority": 1
+    },
+    {
+        "hide": true,
+        "type": "a",
+        "start": "2024-06-11",
+        "end": "2024-08-21",
+        "days": ["Sunday", "Monday", "Tuesday"],
+        "color": "var(--color-light)",
+        "textColor": "var(--text)",
+        "text": "We are meeting this week on Thursday at 1:00 PM in the maker space at ELPL!",
+        "priority": 2
+    },
+    {
+        "hide": true,
+        "type": "a",
+        "start": "2024-06-30",
+        "end": "2024-07-04",
+        "color": "var(--color-light)",
+        "textColor": "var(--text)",
+        "text": "🎆 We are NOT meeting this week due to Independence Day! See you next Thursday! 🎆",
+        "priority": 1
+    },
+    {
+        "hide": true,
+        "type": "a",
+        "start": "2024-06-11",
+        "end": "2024-08-21",
+        "days": ["Wednesday"],
+        "color": "var(--color-light)",
+        "textColor": "var(--text)",
+        "text": "Our weekly meeting is tomorrow (Thursday) at 1:00 PM! See you in the maker space at ELPL!",
+        "priority": 2
+    },
+    {
+        "hide": true,
+        "type": "a",
+        "start": "2024-06-11",
+        "end": "2024-08-21",
+        "days": ["Thursday"],
+        "color": "var(--color-light)",
+        "textColor": "var(--text)",
+        "text": "We are meeting today at 1:00 PM! See you in the ELPL maker space!",
+        "priority": 2
+    },
+    {"note": "ELPL EVENTS: ARCHIVED", "hide": true},
+    {
+        "hide": true,
+        "type": "a",
         "start": "2024-07-12",
         "end": "2024-07-25",
         "color": "var(--color-light)",
@@ -93,6 +148,18 @@
         "text": "ELPL is hosting <a href=\"https://elpl.bibliocommons.com/events/66563d97b7ed963d009a17f9\"><i>Shark Day<i></a> once again this year! Contact <a href=\"mailto:eberling@cityofeastlansing.com\">Dr. B</a> if you can help!",
         "priority": 1
     },
+    {
+        "hide": true,
+        "type": "event",
+        "color": "var(--color-light-gray)",
+        "text": "Shark Day!",
+        "location": "East Lansing Public Library Maker Space",
+        "when": "July 25, 2024 10:00 AM",
+        "prepare": "Email Dr. B if you are interested in volunteering!",
+        "link": "https://elpl.bibliocommons.com/events/66563d97b7ed963d009a17f9",
+        "end": "2024-07-25"
+    },
+    {"note": "PLACEHOLDERS: ARCHIVED", "hide": true},
     {
         "hide": true,
         "type": "tournament",
@@ -105,36 +172,6 @@
         "link": "https://elhssoc.com/",
         "prepare": "Example Things to Prepare",
         "cost": "Example Price"
-    },
-    {
-        "hide": false,
-        "type": "meeting",
-        "color": "var(--color-light)",
-        "text": "Weekly Meetings",
-        "location": "East Lansing Public Library",
-        "when": "Thursdays in Summer",
-        "who": "SOC Members new and old!",
-        "end": "2024-08-22"
-    },
-    {
-        "hide": false,
-        "type": "event",
-        "color": "var(--color-light-gray)",
-        "text": "Shark Day!",
-        "location": "East Lansing Public Library Maker Space",
-        "when": "July 25, 2024 10:00 AM",
-        "prepare": "Email Dr. B if you are interested in volunteering!",
-        "link": "https://elpl.bibliocommons.com/events/66563d97b7ed963d009a17f9",
-        "end": "2024-07-25"
-    },
-    {
-        "hide": false,
-        "type": "tournament",
-        "color": "maroon",
-        "text": "No Remaining Tournaments!",
-        "location": "Come to our Summer Study Meetings!",
-        "when": "The 2025 Season will Arrive Faster than you Think!",
-        "end": "2024-08-31"
     }
 
 ]

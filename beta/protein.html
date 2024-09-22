@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codon Sequencing Game</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            height: 100%;
+            overflow: hidden;
+        }
+        .game-container {
+            display: flex;
+            height: 100%;
+        }
+        .sequence-container {
+            width: 40%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+            position: relative;
+            overflow: hidden;
+        }
+        .sequence-wrapper {
+            position: relative;
+            width: 300px;
+            height: 50px;
+            overflow: hidden;
+        }
+        .sequence {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            white-space: nowrap;
+            transition: left 0.5s ease;
+        }
+        .current-codon {
+            display: inline-block;
+            padding: 5px;
+            border: 2px solid #2196F3;
+            background-color: #E3F2FD;
+        }
+        .codon-chart-container {
+            width: 60%;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+            overflow: auto;
+        }
+        .codon-chart {
+            display: grid;
+            grid-template-columns: auto repeat(4, 1fr);
+            gap: 2px;
+            font-size: 12px;
+        }
+        .codon-chart > div {
+            padding: 5px;
+            text-align: center;
+            background-color: #f1f1f1;
+            border-radius: 3px;
+        }
+        .codon-group {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 5px;
+        }
+        .codon {
+            cursor: move;
+            transition: background-color 0.3s;
+            font-size: 20px;
+            border-radius: 5px;
+        }
+        .codon:hover {
+            background-color: #e0e0e0;
+        }
+        .nucleotide-label {
+            font-weight: bold;
+            background-color: #d4d4d4;
+        }
+        .timer {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+        @media screen and (max-width: 480px) {
+            .codon {
+                font-size: 12px;
+                border-radius: 3px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="sequence-container">
+            <div class="timer">Time: 0.00s</div>
+            <div class="sequence-wrapper">
+                <div class="sequence"></div>
+            </div>
+        </div>
+        <div class="codon-chart-container">
+            <div class="codon-chart"></div>
+        </div>
+    </div>
+    <div class="overlay"></div>
+    <div class="popup">
+        <h2 id="congratulations">Congratulations!</h2>
+        <p><strong>You created a new protein in <span id="final-time"></span> seconds!</strong><br>High Score: <span id="high-score"></span> seconds.</p>
+        <button onclick="resetGame()">Play Again</button>
+    </div>
+
+    <script>
+        const codonChart = {
+            'UUU': 'Phe', 'UUC': 'Phe', 'UUA': 'Leu', 'UUG': 'Leu',
+            'CUU': 'Leu', 'CUC': 'Leu', 'CUA': 'Leu', 'CUG': 'Leu',
+            'AUU': 'Ile', 'AUC': 'Ile', 'AUA': 'Ile', 'AUG': 'Met',
+            'GUU': 'Val', 'GUC': 'Val', 'GUA': 'Val', 'GUG': 'Val',
+            'UCU': 'Ser', 'UCC': 'Ser', 'UCA': 'Ser', 'UCG': 'Ser',
+            'CCU': 'Pro', 'CCC': 'Pro', 'CCA': 'Pro', 'CCG': 'Pro',
+            'ACU': 'Thr', 'ACC': 'Thr', 'ACA': 'Thr', 'ACG': 'Thr',
+            'GCU': 'Ala', 'GCC': 'Ala', 'GCA': 'Ala', 'GCG': 'Ala',
+            'UAU': 'Tyr', 'UAC': 'Tyr', 'UAA': 'Stop', 'UAG': 'Stop',
+            'CAU': 'His', 'CAC': 'His', 'CAA': 'Gln', 'CAG': 'Gln',
+            'AAU': 'Asn', 'AAC': 'Asn', 'AAA': 'Lys', 'AAG': 'Lys',
+            'GAU': 'Asp', 'GAC': 'Asp', 'GAA': 'Glu', 'GAG': 'Glu',
+            'UGU': 'Cys', 'UGC': 'Cys', 'UGA': 'Stop', 'UGG': 'Trp',
+            'CGU': 'Arg', 'CGC': 'Arg', 'CGA': 'Arg', 'CGG': 'Arg',
+            'AGU': 'Ser', 'AGC': 'Ser', 'AGA': 'Arg', 'AGG': 'Arg',
+            'GGU': 'Gly', 'GGC': 'Gly', 'GGA': 'Gly', 'GGG': 'Gly'
+        };
+
+        const stopCodons = ['UAA', 'UAG', 'UGA'];
+        const codonOptions = Object.keys(codonChart).filter(c => !stopCodons.includes(c));
+        let targetSequence = ['AUG', 'CUU', 'GGU', 'UUU', 'ACU', 'UAA']; // Met, Leu, Gly, Phe, Thr, Stop
+        let currentIndex = 0;
+        let startTime, timerInterval;
+
+        function initializeGame() {
+            generateRandomSequence(6);
+
+            const codonChartElement = document.querySelector('.codon-chart');
+            
+            // Add nucleotide labels
+            codonChartElement.appendChild(createLabel(''));
+            'UCAG'.split('').forEach(n => codonChartElement.appendChild(createLabel(n)));
+            
+            for (let i = 0; i < 4; i++) {
+                codonChartElement.appendChild(createLabel('UCAG'[i]));
+                for (let j = 0; j < 4; j++) {
+                    const codonGroup = document.createElement('div');
+                    codonGroup.className = 'codon-group';
+                    for (let k = 0; k < 4; k++) {
+                        const codon = 'UCAG'[i] + 'UCAG'[j] + 'UCAG'[k];
+                        const codonElement = document.createElement('div');
+                        codonElement.className = 'codon';
+                        codonElement.textContent = codon;
+                        codonElement.title = `${codon}: ${codonChart[codon]}`;
+                        codonElement.draggable = true;
+                        codonElement.addEventListener('dragstart', drag);
+                        codonElement.style.backgroundColor = getCodonColor(codon);
+                        codonGroup.appendChild(codonElement);
+                    }
+                    codonChartElement.appendChild(codonGroup);
+                }
+            }
+
+            const sequenceContainer = document.querySelector('.sequence-container');
+            sequenceContainer.addEventListener('dragover', allowDrop);
+            sequenceContainer.addEventListener('drop', drop);
+
+            updateSequence();
+            startTimer();
+        }
+
+        function generateRandomSequence(len) {
+            // Generate 5 random codons and end with a stop codon
+            targetSequence = [];
+            for (let i = 0; i < len - 1; i++) {
+                const randomCodon = codonOptions[Math.floor(Math.random() * codonOptions.length)];
+                targetSequence.push(randomCodon);
+            }
+            targetSequence.push(stopCodons[Math.floor(Math.random() * stopCodons.length)]); // Add a stop codon at the end
+        }
+
+        function createLabel(text) {
+            const label = document.createElement('div');
+            label.className = 'nucleotide-label';
+            label.textContent = text;
+            return label;
+        }
+
+        function getCodonColor(codon) {
+            const colors = {
+                'U': '#FFB3BA', // Light Red
+                'C': '#BAFFC9', // Light Green
+                'A': '#BAE1FF', // Light Blue
+                'G': '#FFFFBA'  // Light Yellow
+            };
+            return colors[codon[0]];
+        }
+
+        function startTimer() {
+            startTime = new Date().getTime();
+            timerInterval = setInterval(updateTimer, 10);
+        }
+
+        function updateTimer() {
+            const currentTime = new Date().getTime();
+            const elapsedTime = (currentTime - startTime) / 1000;
+            document.querySelector('.timer').textContent = `Time: ${elapsedTime.toFixed(2)}s`;
+        }
+
+        function drag(event) {
+            event.dataTransfer.setData("text", event.target.textContent);
+        }
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            const codon = event.dataTransfer.getData("text");
+            
+            if (codon === targetSequence[currentIndex]) {
+                currentIndex++;
+                updateSequence();
+                
+                if (currentIndex === targetSequence.length) {
+                    gameOver();
+                }
+            }
+        }
+
+        function updateSequence() {
+            const sequenceElement = document.querySelector('.sequence');
+            let sequenceHTML = '';
+            
+            for (let i = 0; i < targetSequence.length; i++) {
+                if (i < currentIndex) {
+                    sequenceHTML += `<span style="color: #4CAF50;">${targetSequence[i]}</span>`;
+                } else if (i === currentIndex) {
+                    sequenceHTML += `<span class="current-codon">${targetSequence[i]}</span>`;
+                } else {
+                    sequenceHTML += `<span style="color: #9E9E9E;">${targetSequence[i]}</span>`;
+                }
+            }
+            
+            sequenceElement.innerHTML = sequenceHTML;
+            
+            // Move the sequence to keep the current codon centered
+            const offset = currentIndex * 60 - 150; // Adjust based on codon width and sequence-wrapper width
+            sequenceElement.style.left = `calc(50% - ${offset}px)`;
+        }
+
+        function gameOver() {
+            clearInterval(timerInterval);
+            const finalTime = ((new Date().getTime() - startTime) / 1000).toFixed(2);
+            const highScore = localStorage.getItem("mjbProtein") || Infinity;
+            if (finalTime < highScore) {
+                highScore = finalTime;
+                document.getElementById('congratulations').textContent = "New High Score!";
+                localStorage.setItem("mjbProtein", finalTime)
+            } else {
+                document.getElementById('congratulations').textContent = "Congratulations!";
+            }
+            document.getElementById('final-time').textContent = finalTime;
+            document.getElementById('high-score').textContent = highScore;
+            document.querySelector('.overlay').style.display = 'block';
+            document.querySelector('.popup').style.display = 'block';
+        }
+
+        function resetGame() {
+            currentIndex = 0;
+            document.querySelector('.overlay').style.display = 'none';
+            document.querySelector('.popup').style.display = 'none';
+            generateRandomSequence(6);
+            updateSequence();
+            startTimer();
+        }
+
+        initializeGame();
+    </script>
+</body>
+</html>

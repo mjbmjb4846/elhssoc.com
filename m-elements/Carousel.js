@@ -1,4 +1,9 @@
 class ImageCarousel extends HTMLElement {
+  /**
+   * Creates an instance of ImageCarousel.
+   *
+   * @constructor
+   */
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
@@ -7,14 +12,34 @@ class ImageCarousel extends HTMLElement {
     this.images = [];
   }
 
+  /**
+   * Called when the element is added to the DOM.
+   *
+   * @method connectedCallback
+   */
   connectedCallback() {
     this.loadImages();
   }
 
+  /**
+   * Returns the list of attributes to observe for changes.
+   *
+   * @static
+   * @readonly
+   * @type {string[]}
+   */
   static get observedAttributes() {
     return ['width', 'height', 'border-width', 'border-color', 'timer', 'images'];
   }
 
+  /**
+   * Called when an observed attribute has been added, removed, updated, or replaced.
+   *
+   * @param {string} name - The name of the attribute.
+   * @param {string} oldValue - The old value of the attribute.
+   * @param {string} newValue - The new value of the attribute.
+   * @method attributeChangedCallback
+   */
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue !== newValue) {
       if (name === 'images') {
@@ -28,6 +53,11 @@ class ImageCarousel extends HTMLElement {
     }
   }
 
+  /**
+   * Loads images based on the 'images' attribute.
+   *
+   * @method loadImages
+   */
   loadImages() {
     const imagesAttr = this.getAttribute('images');
     if (!imagesAttr) return;
@@ -44,6 +74,12 @@ class ImageCarousel extends HTMLElement {
     }
   }
 
+  /**
+   * Loads images from a specified folder path.
+   *
+   * @param {string} folderPath - The path to the folder containing images.
+   * @method loadImagesFromFolder
+   */
   loadImagesFromFolder(folderPath) {
     // Remove leading slash if present
     folderPath = folderPath.replace(/^\//, '');
@@ -78,6 +114,11 @@ class ImageCarousel extends HTMLElement {
       });
   }
 
+  /**
+   * Renders the carousel with the loaded images.
+   *
+   * @method render
+   */
   render() {
     const width = this.getAttribute('width') || '100%';
     const height = this.getAttribute('height') || '400px';
@@ -154,6 +195,11 @@ class ImageCarousel extends HTMLElement {
     this.updateCarousel();
   }
 
+  /**
+   * Sets up event listeners for navigation buttons and dots.
+   *
+   * @method setupEventListeners
+   */
   setupEventListeners() {
     const prevButton = this.shadowRoot.querySelector('.prev');
     const nextButton = this.shadowRoot.querySelector('.next');
@@ -166,18 +212,35 @@ class ImageCarousel extends HTMLElement {
     });
   }
 
+  /**
+   * Navigates to the next or previous slide.
+   *
+   * @param {number} direction - The direction to navigate (1 for next, -1 for previous).
+   * @method navigate
+   */
   navigate(direction) {
     this.currentIndex = (this.currentIndex + direction + this.images.length) % this.images.length;
     this.updateCarousel();
     this.stopTimer();
   }
 
+  /**
+   * Goes to a specific slide.
+   *
+   * @param {number} index - The index of the slide to go to.
+   * @method goToSlide
+   */
   goToSlide(index) {
     this.currentIndex = index;
     this.updateCarousel();
     this.stopTimer();
   }
 
+  /**
+   * Updates the carousel to show the current slide.
+   *
+   * @method updateCarousel
+   */
   updateCarousel() {
     const container = this.shadowRoot.querySelector('.carousel-container');
     if (container) {
@@ -190,6 +253,11 @@ class ImageCarousel extends HTMLElement {
     }
   }
 
+  /**
+   * Starts the timer for automatic slide navigation.
+   *
+   * @method startTimer
+   */
   startTimer() {
     this.stopTimer();
     const timerDuration = parseInt(this.getAttribute('timer')) || 5000;
@@ -199,6 +267,11 @@ class ImageCarousel extends HTMLElement {
     }, timerDuration);
   }
 
+  /**
+   * Stops the timer for automatic slide navigation.
+   *
+   * @method stopTimer
+   */
   stopTimer() {
     if (this.timer) {
       clearInterval(this.timer);
