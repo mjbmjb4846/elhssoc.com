@@ -286,7 +286,7 @@
         function gameOver() {
             clearInterval(timerInterval);
             const finalTime = ((new Date().getTime() - startTime) / 1000).toFixed(2);
-            const highScore = localStorage.getItem("mjbProtein") || Infinity;
+            let highScore = localStorage.getItem("mjbProtein") || Infinity;
             if (finalTime < highScore) {
                 highScore = finalTime;
                 document.getElementById('congratulations').textContent = "New High Score!";
