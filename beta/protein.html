@@ -5,12 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Codon Sequencing Game</title>
     <style>
+        :root {
+            --primary-color: #2196F3;
+            --secondary-color: #E3F2FD;
+            --background-color: #f0f0f0;
+            --text-color: #333;
+            --hover-color: #e0e0e0;
+            --success-color: #4CAF50;
+            --inactive-color: #9E9E9E;
+            --popup-background: rgba(255, 255, 255, 0.9);
+            --overlay-color: rgba(0, 0, 0, 0.5);
+            --codon-u-color: #FFB3BA;
+            --codon-c-color: #BAFFC9;
+            --codon-a-color: #BAE1FF;
+            --codon-g-color: #FFFFBA;
+        }
+
         body, html {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
             height: 100%;
             overflow: hidden;
+            color: var(--text-color);
         }
         .game-container {
             display: flex;
@@ -21,13 +38,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #f0f0f0;
+            background-color: var(--background-color);
             position: relative;
             overflow: hidden;
         }
         .sequence-wrapper {
             position: relative;
-            width: 300px;
+            width: 75%;
             height: 50px;
             overflow: hidden;
         }
@@ -43,8 +60,8 @@
         .current-codon {
             display: inline-block;
             padding: 5px;
-            border: 2px solid #2196F3;
-            background-color: #E3F2FD;
+            border: 2px solid var(--primary-color);
+            background-color: var(--secondary-color);
         }
         .codon-chart-container {
             width: 60%;
@@ -62,7 +79,7 @@
         .codon-chart > div {
             padding: 5px;
             text-align: center;
-            background-color: #f1f1f1;
+            background-color: var(--background-color);
             border-radius: 3px;
         }
         .codon-group {
@@ -78,7 +95,7 @@
             border-radius: 5px;
         }
         .codon:hover {
-            background-color: #e0e0e0;
+            background-color: var(--hover-color);
         }
         .nucleotide-label {
             font-weight: bold;
@@ -96,11 +113,14 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            background-color: var(--popup-background);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
             z-index: 1000;
+            text-align: center;
+            max-width: 80%;
+            width: 400px;
         }
         .overlay {
             display: none;
@@ -109,10 +129,58 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background-color: var(--overlay-color);
+            backdrop-filter: blur(5px);
             z-index: 999;
         }
-        @media screen and (max-width: 480px) {
+        .popup h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        .popup button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .popup button:hover {
+            background-color: #1976D2;
+        }
+        #length-selector {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #length-selector input {
+            width: 50px;
+            text-align: center;
+            font-size: 18px;
+            margin: 0 10px;
+        }
+        .blurred-edge {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 25%;
+            pointer-events: none;
+        }
+        .blurred-edge-left {
+            left: 0;
+            background: linear-gradient(to right, var(--background-color), transparent);
+        }
+        .blurred-edge-right {
+            right: 0;
+            background: linear-gradient(to left, var(--background-color), transparent);
+        }
+        @media screen and (max-width: 700px) {
+            .sequence-wrapper {
+                width: 100%;
+            }
             .codon {
                 font-size: 12px;
                 border-radius: 3px;
@@ -126,6 +194,8 @@
             <div class="timer">Time: 0.00s</div>
             <div class="sequence-wrapper">
                 <div class="sequence"></div>
+                <div class="blurred-edge blurred-edge-left"></div>
+                <div class="blurred-edge blurred-edge-right"></div>
             </div>
         </div>
         <div class="codon-chart-container">
@@ -133,10 +203,19 @@
         </div>
     </div>
     <div class="overlay"></div>
-    <div class="popup">
+    <div id="start-menu" class="popup">
+        <h2>Codon Sequencing Game</h2>
+        <p>Create a protein by selecting the correct codons in order.</p>
+        <div id="length-selector">
+            <label for="protein-length">Protein Length:</label>
+            <input type="number" id="protein-length" min="3" max="10" value="6">
+        </div>
+        <button onclick="startGame()">Play</button>
+    </div>
+    <div id="end-menu" class="popup">
         <h2 id="congratulations">Congratulations!</h2>
         <p><strong>You created a new protein in <span id="final-time"></span> seconds!</strong><br>High Score: <span id="high-score"></span> seconds.</p>
-        <button onclick="resetGame()">Play Again</button>
+        <button onclick="showStartMenu()">Play Again</button>
     </div>
 
     <script>
@@ -161,14 +240,15 @@
 
         const stopCodons = ['UAA', 'UAG', 'UGA'];
         const codonOptions = Object.keys(codonChart).filter(c => !stopCodons.includes(c));
-        let targetSequence = ['AUG', 'CUU', 'GGU', 'UUU', 'ACU', 'UAA']; // Met, Leu, Gly, Phe, Thr, Stop
+        let targetSequence = [];
         let currentIndex = 0;
         let startTime, timerInterval;
+        let proteinLength = 6;
+        let draggedElement = null;
 
         function initializeGame() {
-            generateRandomSequence(6);
-
             const codonChartElement = document.querySelector('.codon-chart');
+            codonChartElement.innerHTML = '';
             
             // Add nucleotide labels
             codonChartElement.appendChild(createLabel(''));
@@ -185,9 +265,9 @@
                         codonElement.className = 'codon';
                         codonElement.textContent = codon;
                         codonElement.title = `${codon}: ${codonChart[codon]}`;
-                        codonElement.draggable = true;
-                        codonElement.addEventListener('dragstart', drag);
                         codonElement.style.backgroundColor = getCodonColor(codon);
+                        codonElement.addEventListener('mousedown', dragStart);
+                        codonElement.addEventListener('touchstart', dragStart, { passive: false });
                         codonGroup.appendChild(codonElement);
                     }
                     codonChartElement.appendChild(codonGroup);
@@ -195,21 +275,41 @@
             }
 
             const sequenceContainer = document.querySelector('.sequence-container');
-            sequenceContainer.addEventListener('dragover', allowDrop);
-            sequenceContainer.addEventListener('drop', drop);
+            sequenceContainer.addEventListener('mousemove', drag);
+            sequenceContainer.addEventListener('touchmove', drag, { passive: false });
+            sequenceContainer.addEventListener('mouseup', dragEnd);
+            sequenceContainer.addEventListener('touchend', dragEnd);
+            sequenceContainer.addEventListener('mouseleave', dragEnd);
+            
+            document.body.addEventListener('mouseup', dragEnd);
+            document.body.addEventListener('touchend', dragEnd);
 
+            showStartMenu();
+        }
+
+        function showStartMenu() {
+            document.getElementById('end-menu').style.display = 'none';
+            document.getElementById('start-menu').style.display = 'block';
+            document.querySelector('.overlay').style.display = 'block';
+        }
+
+        function startGame() {
+            proteinLength = parseInt(document.getElementById('protein-length').value);
+            generateRandomSequence(proteinLength);
+            currentIndex = 0;
             updateSequence();
             startTimer();
+            document.getElementById('start-menu').style.display = 'none';
+            document.querySelector('.overlay').style.display = 'none';
         }
 
         function generateRandomSequence(len) {
-            // Generate 5 random codons and end with a stop codon
             targetSequence = [];
             for (let i = 0; i < len - 1; i++) {
                 const randomCodon = codonOptions[Math.floor(Math.random() * codonOptions.length)];
                 targetSequence.push(randomCodon);
             }
-            targetSequence.push(stopCodons[Math.floor(Math.random() * stopCodons.length)]); // Add a stop codon at the end
+            targetSequence.push(stopCodons[Math.floor(Math.random() * stopCodons.length)]);
         }
 
         function createLabel(text) {
@@ -221,10 +321,10 @@
 
         function getCodonColor(codon) {
             const colors = {
-                'U': '#FFB3BA', // Light Red
-                'C': '#BAFFC9', // Light Green
-                'A': '#BAE1FF', // Light Blue
-                'G': '#FFFFBA'  // Light Yellow
+                'U': 'var(--codon-u-color)',
+                'C': 'var(--codon-c-color)',
+                'A': 'var(--codon-a-color)',
+                'G': 'var(--codon-g-color)'
             };
             return colors[codon[0]];
         }
@@ -240,18 +340,65 @@
             document.querySelector('.timer').textContent = `Time: ${elapsedTime.toFixed(2)}s`;
         }
 
-        function drag(event) {
-            event.dataTransfer.setData("text", event.target.textContent);
-        }
-
-        function allowDrop(event) {
+        function dragStart(event) {
             event.preventDefault();
-        }
-
-        function drop(event) {
-            event.preventDefault();
-            const codon = event.dataTransfer.getData("text");
+            if (event.type === 'touchstart') {
+                event = event.touches[0];
+            }
+            draggedElement = this.cloneNode(true);
+            draggedElement.style.position = 'absolute';
+            draggedElement.style.opacity = '0.8';
+            draggedElement.style.pointerEvents = 'none';
+            document.body.appendChild(draggedElement);
             
+            updateDraggedPosition(event.clientX, event.clientY);
+        }
+
+        function drag(event) {
+            event.preventDefault();
+            if (draggedElement) {
+                let clientX, clientY;
+                if (event.type === 'touchmove') {
+                    clientX = event.touches[0].clientX;
+                    clientY = event.touches[0].clientY;
+                } else {
+                    clientX = event.clientX;
+                    clientY = event.clientY;
+                }
+                updateDraggedPosition(clientX, clientY);
+            }
+        }
+
+        function dragEnd(event) {
+            if (draggedElement) {
+                const sequenceContainer = document.querySelector('.sequence-container');
+                const containerRect = sequenceContainer.getBoundingClientRect();
+                let clientX, clientY;
+                
+                if (event.type === 'touchend') {
+                    clientX = event.changedTouches[0].clientX;
+                    clientY = event.changedTouches[0].clientY;
+                } else {
+                    clientX = event.clientX;
+                    clientY = event.clientY;
+                }
+
+                if (clientX >= containerRect.left && clientX <= containerRect.right &&
+                    clientY >= containerRect.top && clientY <= containerRect.bottom) {
+                    checkCodon(draggedElement.textContent);
+                }
+
+                document.body.removeChild(draggedElement);
+                draggedElement = null;
+            }
+        }
+
+        function updateDraggedPosition(x, y) {
+            draggedElement.style.left = `${x - draggedElement.offsetWidth / 2}px`;
+            draggedElement.style.top = `${y - draggedElement.offsetHeight / 2}px`;
+        }
+
+        function checkCodon(codon) {
             if (codon === targetSequence[currentIndex]) {
                 currentIndex++;
                 updateSequence();
@@ -268,11 +415,11 @@
             
             for (let i = 0; i < targetSequence.length; i++) {
                 if (i < currentIndex) {
-                    sequenceHTML += `<span style="color: #4CAF50;">${targetSequence[i]}</span>`;
+                    sequenceHTML += `<span style="color: var(--success-color);">${targetSequence[i]}</span>`;
                 } else if (i === currentIndex) {
                     sequenceHTML += `<span class="current-codon">${targetSequence[i]}</span>`;
                 } else {
-                    sequenceHTML += `<span style="color: #9E9E9E;">${targetSequence[i]}</span>`;
+                    sequenceHTML += `<span style="color: var(--inactive-color);">${targetSequence[i]}</span>`;
                 }
             }
             
@@ -286,27 +433,19 @@
         function gameOver() {
             clearInterval(timerInterval);
             const finalTime = ((new Date().getTime() - startTime) / 1000).toFixed(2);
-            let highScore = localStorage.getItem("mjbProtein") || Infinity;
+            const highScoreKey = `mjbProtein_${proteinLength}`;
+            let highScore = localStorage.getItem(highScoreKey) || Infinity;
             if (finalTime < highScore) {
                 highScore = finalTime;
                 document.getElementById('congratulations').textContent = "New High Score!";
-                localStorage.setItem("mjbProtein", finalTime)
+                localStorage.setItem(highScoreKey, finalTime);
             } else {
                 document.getElementById('congratulations').textContent = "Congratulations!";
             }
             document.getElementById('final-time').textContent = finalTime;
             document.getElementById('high-score').textContent = highScore;
             document.querySelector('.overlay').style.display = 'block';
-            document.querySelector('.popup').style.display = 'block';
-        }
-
-        function resetGame() {
-            currentIndex = 0;
-            document.querySelector('.overlay').style.display = 'none';
-            document.querySelector('.popup').style.display = 'none';
-            generateRandomSequence(6);
-            updateSequence();
-            startTimer();
+            document.getElementById('end-menu').style.display = 'block';
         }
 
         initializeGame();
