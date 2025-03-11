@@ -64,6 +64,32 @@ function menuInit() {
     });
 
     document.body.appendChild(button);
+
+    // Check for saved theme preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        document.body.classList.toggle('dark-mode', savedTheme === 'dark');
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+    }
+
+    // Create the settings icon
+    const settingsIcon = document.createElement('ion-icon');
+    settingsIcon.name = 'cog-outline';
+    settingsIcon.classList.add('settings-icon');
+    settingsIcon.style.position = 'fixed';
+    settingsIcon.style.bottom = '10px';
+    settingsIcon.style.left = '10px';
+    settingsIcon.style.cursor = 'pointer';
+
+    // Add event listener to toggle dark and light mode
+    settingsIcon.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+    });
+
+    document.body.appendChild(settingsIcon);
 }
 
 // UTILITIES -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --

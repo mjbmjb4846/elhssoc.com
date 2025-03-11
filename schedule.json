@@ -14,6 +14,38 @@
     },
     {
         "hide": false,
+        "type": "tournament",
+        "color": "var(--color-light)",
+        "text": "2025 Region 11 Tournament",
+        "location": "East Lansing High School",
+        "when": "Saturday March 15, 2025",
+        "who": "Main team and TWO alternate teams!",
+        "prepare": "Study hard and collect some friends who might want to try out SOC on the second alternate team!",
+        "end": "2025-03-15"
+    },
+    {
+        "hide": false,
+        "type": "event",
+        "color": "maroon",
+        "text": "Red Cedar STEM Night",
+        "location": "Red Cedar Elementary (East Lansing)",
+        "when": "April 10, 2025 (5:30 - 7:30 PM)",
+        "who": "Anyone interested in sharing a love for STEM!",
+        "end": "2025-04-10",
+        "prepare": "Formulate a fun and engaging activity to share with the community!"
+    },
+    {
+        "hide": false,
+        "type": "a",
+        "start": "2025-03-09",
+        "end": "2025-03-15",
+        "color": "var(--color-light)",
+        "textColor": "var(--text)",
+        "text": "The regional tournament is at ELHS this Saturday! Time to show off your hard work!",
+        "priority": 1
+    },
+    {
+        "hide": true,
         "type": "a",
         "start": "2024-09-01",
         "end": "2024-09-05",
@@ -50,7 +82,7 @@
 
 
     {
-        "hide": false,
+        "hide": true,
         "type": "tournament",
         "color": "maroon",
         "text": "No Remaining Tournaments!",
