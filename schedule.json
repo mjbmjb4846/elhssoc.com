@@ -4,6 +4,16 @@
 
     {
         "hide": false,
+        "type": "a",
+        "start": "2025-05-05",
+        "end": "2025-06-30",
+        "color": "var(--color-light)",
+        "textColor": "var(--text)",
+        "text": "Check out the new <u><a style=\"color:var(--text)\" href=\"https://www.soinc.org/sites/default/files/uploaded_files/2026_Event_Slate.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">2025-2026 Event Slate</a></u>!",
+        "priority": 5
+    },
+    {
+        "hide": false,
         "type": "meeting",
         "color": "var(--color-light)",
         "text": "Weekly Meetings",
