@@ -30,19 +30,18 @@
         "location": "Patriarche Park Pavilion",
         "when": "June 2, 2025 (subject to change)",
         "who": "Everyone!",
-        "prepare": "Bring a dish to share with the team! We will provide drinks and paper products.",
+        "prepare": "Bring a dish to share with the team! We will provide drinks and utensils.",
         "end": "2025-06-02"
     },
     {
         "hide": false,
         "type": "event",
-        "color": "maroon",
-        "text": "Red Cedar STEM Night",
-        "location": "Red Cedar Elementary (East Lansing)",
-        "when": "April 10, 2025 (5:30 - 7:30 PM)",
-        "who": "Anyone interested in sharing a love for STEM!",
-        "end": "2025-04-10",
-        "prepare": "Formulate a fun and engaging activity to share with the community!"
+        "color": "yellow",
+        "text": "Summer Meetings",
+        "location": "East Lansing Public Library Maker Space",
+        "when": "TBD",
+        "who": "Middle School and High School Science Olympiad Members",
+        "end": "2025-08-25"
     },
     {
         "hide": false,
