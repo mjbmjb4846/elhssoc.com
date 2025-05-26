@@ -24,14 +24,14 @@
     },
     {
         "hide": false,
-        "type": "tournament",
+        "type": "event",
         "color": "var(--color-light)",
-        "text": "2025 Region 11 Tournament",
-        "location": "East Lansing High School",
-        "when": "Saturday March 15, 2025",
-        "who": "Main team and TWO alternate teams!",
-        "prepare": "Study hard and collect some friends who might want to try out SOC on the second alternate team!",
-        "end": "2025-03-15"
+        "text": "End of Year Banquet",
+        "location": "Patriarche Park Pavilion",
+        "when": "June 2, 2025 (subject to change)",
+        "who": "Everyone!",
+        "prepare": "Bring a dish to share with the team! We will provide drinks and paper products.",
+        "end": "2025-06-02"
     },
     {
         "hide": false,
