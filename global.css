@@ -48,6 +48,7 @@ body.dark-mode {
     --google: hsl(4, 100%, 14%);
     --scioly: hsl(48, 99%, 27%);
     --instagram: hsl(276, 51%, 2%);
+    --summer: #FFFF00;
 }
 
 body.dark-mode .gform {

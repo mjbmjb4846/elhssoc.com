@@ -6,26 +6,113 @@
     <title>ELHSSOC | Games</title>
     <link rel="icon" type="image/ico" href="favicon.ico">
 
-    <link href="./global.css" type="text/css" rel="stylesheet">
-
-    <script src="m-elements/spinButton.js"></script>
-    <script src="m-elements/spacer.js"></script>
-    <script src="m-elements/Image.js"></script>
-    <script src="m-elements/Dropdown.js"></script>
-    <script src="m-elements/Title.js"></script>
-    <script src="m-elements/Announcement.js"></script>
-    <script src="m-elements/AltTitle.js"></script>
-    <script src="m-elements/TextBox.js"></script>
-    <script src="m-elements/Download.js"></script>
-    <script src="m-elements/Carousel.js"></script>
-    <script src="m-elements/InfoCard.js"></script>
-    <script src="m-elements/UpcomingEvents.js"></script>
-    <script src="m-elements/SpinDropdown.js"></script>
-
-    <script src="./index.js"></script>
+    <link href="../global.css" type="text/css" rel="stylesheet">
+    <script src="https://unpkg.com/m-html-utils@latest/m-html-utils.min.js"></script>
+    <script src="../index.js"></script>
 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <style>
+        .games-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto auto;
+            gap: 2rem;
+        }        .game-card {
+            background: linear-gradient(135deg, var(--color-light) 0%, #f8f9fa 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: none;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .featured-game {
+            grid-row: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem;
+        }
+
+        .featured-game h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .featured-game p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .game-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--color-dark);
+        }
+
+        .game-card p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--color-dark);
+            opacity: 0.8;
+        }
+
+        .featured-game h3,
+        .featured-game p {
+            color: white;
+        }
+
+        .game-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .featured-game .game-icon {
+            font-size: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .games-container {
+                padding: 1rem;
+                gap: 1.5rem;
+            }
+            
+            .game-card {
+                padding: 1.5rem;
+            }
+            
+            .featured-game {
+                padding: 2rem;
+            }
+            
+            .featured-game h2 {
+                font-size: 2rem;
+            }
+            
+            .game-card h3 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
 
 </head>
 <body>
@@ -36,7 +123,29 @@
 
     <m-spacer></m-spacer>
 
+    <div class="games-container">
+        <!-- Featured Game - Protein Game -->        <a href="protein.html" class="game-card featured-game">
+            <ion-icon name="dna-outline" class="game-icon"></ion-icon>
+            <h2>Codon Sequencing Game</h2>
+            <p>Master the art of protein synthesis! Test your knowledge of the genetic code by selecting the correct codons to build amino acid sequences. Race against time to create complete proteins while learning about molecular biology and genetics.<br><br><i>Inspired by an interactive exhibit at the University of Michigan Natural History Museum.<i></i></p>
+        </a>
+
+        <!-- Other Games Grid -->
+        <div class="game-grid">
+            <a href="ballGame.html" class="game-card">
+                <ion-icon name="basketball-outline" class="game-icon"></ion-icon>
+                <h3>Physics Ball Game</h3>
+                <p>A bouncing ball physics test!</p>
+            </a>
+
+            <a href="catchGame.html" class="game-card">
+                <ion-icon name="hand-left-outline" class="game-icon"></ion-icon>
+                <h3>Catch the Objects</h3>
+                <p>A simple HTML Canvas game!</p>
+            </a>
+        </div>
+    </div>
+
     <script>menuInit()</script>
-    
 </body>
 </html>

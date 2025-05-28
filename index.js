@@ -4,25 +4,30 @@
  * Creates a Navigation Menu when Called on an HTML Page.
  */
 function menuInit() {
+    // Calculate the relative path to the root directory
+    const currentPath = window.location.pathname;
+    const pathDepth = currentPath.split('/').length - 2; // -2 because of leading slash and filename
+    const rootPath = pathDepth > 0 ? '../'.repeat(pathDepth) : './';
+    
     let menu = document.createElement('div');
     menu.innerHTML = `<nav>
     <ul>
-        <li><a href="./index.html">Home</a></li>
-        <li><a href="./about.html">About</a></li>
-        <li><a href="./socials.html">Socials</a></li>
-        <li><a href="./log.html">Study Log</a></li>
-        <li><a href="./schedule.html">Calendar</a></li>
-        <li><a href="./tournaments.html">Tournaments</a></li>
+        <li><a href="${rootPath}index.html">Home</a></li>
+        <li><a href="${rootPath}about.html">About</a></li>
+        <li><a href="${rootPath}socials.html">Socials</a></li>
+        <li><a href="${rootPath}log.html">Study Log</a></li>
+        <li><a href="${rootPath}schedule.html">Calendar</a></li>
+        <li><a href="${rootPath}tournaments.html">Tournaments</a></li>
     </ul>
 </nav>`;
 
     const logoLink = document.createElement('a');
-    logoLink.href = './index.html';
+    logoLink.href = `${rootPath}index.html`;
     const logoSVG = document.createElement('img');
     if (window.innerWidth > 768) {
-        logoSVG.src = './soLogo.svg';
+        logoSVG.src = `${rootPath}soLogo.svg`;
     } else {
-        logoSVG.src = './soLogoSmall.svg';
+        logoSVG.src = `${rootPath}soLogoSmall.svg`;
     }
     logoLink.classList.add("logoLink");
     logoSVG.classList.add("logoSVG");

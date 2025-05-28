@@ -36,7 +36,7 @@
     {
         "hide": false,
         "type": "event",
-        "color": "yellow",
+        "color": "#cccc00",
         "text": "Summer Meetings",
         "location": "East Lansing Public Library Maker Space",
         "when": "Wednesdays 1:00 PM - 3:00 PM (Starting June 11th)",
