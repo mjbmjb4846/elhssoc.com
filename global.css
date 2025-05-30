@@ -1,7 +1,7 @@
 /*     VARIABLES     */
 
 :root {
-    --white: #ffffff;
+    --white: #FFFFFF;
     --color-light-gray: #cecece;
     --color-light: #95c7e4;
     --color-medium: #4464ad;
@@ -43,7 +43,7 @@ body.dark-mode {
     --color-dark: #14183a;
     --color-dark-gray: #333333;
     --black: #000000;
-    --text: #ffffff;
+    --text: #FFFFFF;
     --discord: hsl(227, 59%, 20%);
     --google: hsl(4, 100%, 14%);
     --scioly: hsl(48, 99%, 27%);
@@ -87,7 +87,21 @@ a {
 }
  */
 
-/*     TEXT BLOCKS (Moved to Custom Elements)     */
+/*     SETTINGS MENU     */
+
+.settings-icon {
+    font-size: 3rem;
+    color: var(--text);
+    transition: transform 0.2s ease-in-out, color 0.3s ease-in-out;
+}
+
+.settings-icon:hover {
+    transform: rotate(20deg);
+}
+
+.settings-icon:active {
+    animation: spin 1s linear;
+}
 
 /*     NAVIGATION MENU     */
 
@@ -108,6 +122,7 @@ a {
     display: flex;
     justify-content: flex-end;
     overflow: hidden;
+    z-index: 1000;
 }
 
 .nav-open {
@@ -120,16 +135,14 @@ a {
     width: 8vh;
     height: 8vh;
     overflow: visible;
+    transition: color 0.3s ease-in-out;
+    z-index: 1000;
     /* border-radius: 0 0 15px 0;
     color: var(--white);
     background-color: var(--color-dark);
     text-align: center;
     vertical-align: middle;
     line-height: 8vh; */
-}
-
-.nav-open:hover {
-    filter: brightness(75%);
 }
 
 nav {
@@ -161,10 +174,15 @@ nav li:hover {
 
 nav a {
     text-align: center;
-    color: #ffffff;
+    color: #FFFFFF;
     font-weight: 100;
     width: 100%;
     pointer-events: none;
+}
+
+.nav-container.in ~ .nav-open,
+.nav-container.in ~ .settings-icon {
+    color: #FFFFFF;
 }
 
 /*     EMBEDS     */
@@ -206,25 +224,54 @@ iframe {
 
 .button-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
     position: relative;
-    width: 80vw;
+    width: 85vw;
     margin: auto;
-    gap: 2.5vw
+    gap: 2vw;
+    justify-content: center;
+    
+    /* Default: 3 columns for 3+ buttons */
+    grid-template-columns: repeat(3, 1fr);
 }
 
-.settings-icon {
-    font-size: 3rem;
-    color: var(--text);
-    transition: transform 0.2s ease-in-out;
+/* 1 button: center it */
+.button-grid:has(:nth-child(1):last-child) {
+    grid-template-columns: 1fr;
 }
 
-.settings-icon:hover {
-    transform: rotate(20deg);
+/* 2 buttons: side by side */
+.button-grid:has(:nth-child(2):last-child) {
+    grid-template-columns: repeat(2, 1fr);
 }
 
-.settings-icon:active {
-    animation: spin 1s linear;
+/* 3 buttons: all in one row */
+.button-grid:has(:nth-child(3):last-child) {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* 4 buttons: 2x2 grid */
+.button-grid:has(:nth-child(4):last-child) {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+/* 5 buttons: 2 top, 3 bottom */
+.button-grid:has(:nth-child(5):last-child) {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.button-grid:has(:nth-child(5):last-child) > :nth-child(1) {
+    grid-column: 1 / 2;
+    margin-left: auto;
+}
+
+.button-grid:has(:nth-child(5):last-child) > :nth-child(2) {
+    grid-column: 2 / 4;
+    margin-right: auto;
+}
+
+/* 6+ buttons: 3 columns */
+.button-grid:has(:nth-child(6)) {
+    grid-template-columns: repeat(3, 1fr);
 }
 
 @keyframes spin {
@@ -243,6 +290,20 @@ iframe {
         display: none;
     }
 
+    .button-grid {
+        width: 100vw;
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto;
+        gap: 2.5vh;
+        max-width: none !important;
+    }
+    
+    /* Reset all grid positioning for mobile */
+    .button-grid > * {
+        grid-column: auto !important;
+        margin: 0 !important;
+    }
+
     .nav-container {
         display: flex;
         flex-direction: column;
@@ -250,7 +311,7 @@ iframe {
         width: 50vw;
         justify-content: flex-start;
         transform: translateX(-50vw);
-        transition: all 0.5s ease-in-out;
+        transition: all 0.3s ease-in-out;
     }
 
     .nav-container.in {
@@ -265,7 +326,6 @@ iframe {
         bottom: 0;
         width: 100%;
     }
-
     nav ul {
         flex-direction: column;
         height: 100%;
@@ -273,19 +333,50 @@ iframe {
 
     nav li {
         width: 100%;
+        transform: translateX(-100%);
+        opacity: 0;
+        transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    }
+
+    /* Individual menu item animations when menu is open */
+    .nav-container.in nav li {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    .nav-container.in nav li:nth-child(1) {
+        transition-delay: 0.05s;
+    }
+
+    .nav-container.in nav li:nth-child(2) {
+        transition-delay: 0.1s;
+    }
+
+    .nav-container.in nav li:nth-child(3) {
+        transition-delay: 0.15s;
+    }
+
+    .nav-container.in nav li:nth-child(4) {
+        transition-delay: 0.2s;
+    }
+
+    .nav-container.in nav li:nth-child(5) {
+        transition-delay: 0.25s;
+    }
+
+    .nav-container.in nav li:nth-child(6) {
+        transition-delay: 0.3s;
+    }
+
+    /* Reset delays when closing */
+    .nav-container:not(.in) nav li {
+        transition-delay: 0s;
     }
 }
 
 @media screen and (max-width: 480px) {
     #main-page {
         background-size: auto;
-    }
-
-    .button-grid {
-        width: 100vw;
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr 1fr;
-        gap: 2.5vh;
     }
 
     .double-page {

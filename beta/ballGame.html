@@ -14,7 +14,8 @@
 <body>
     <canvas id="gameCanvas"></canvas>
     <div id="info"></div>
-    <select id="toolSelector">
+    <label for="toolSelector" style="position:absolute;top:10px;right:120px;color:#fff;font-family:Arial,sans-serif;background-color:rgba(0,0,0,0.5);padding:5px;border-radius:5px;">Drawing Tool:</label>
+    <select id="toolSelector" aria-label="Drawing Tool">
         <option value="scribble">Scribble</option>
         <option value="line">Straight Line</option>
     </select>

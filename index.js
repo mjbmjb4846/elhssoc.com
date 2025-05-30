@@ -58,13 +58,9 @@ function menuInit() {
         });
     });
 
-    document.body.appendChild(menu);
-
-    let button = document.createElement('div');
+    document.body.appendChild(menu);    let button = document.createElement('div');
     button.innerHTML = '<ion-icon name="menu"></ion-icon>';
-    button.classList.add('nav-open');
-
-    button.addEventListener('click', function() {
+    button.classList.add('nav-open');    button.addEventListener('click', function() {
         menu.classList.toggle('in');
     });
 
@@ -86,15 +82,22 @@ function menuInit() {
     settingsIcon.style.bottom = '10px';
     settingsIcon.style.left = '10px';
     settingsIcon.style.cursor = 'pointer';
+    settingsIcon.style.zIndex = '1000';
 
     // Add event listener to toggle dark and light mode
     settingsIcon.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
         const isDarkMode = document.body.classList.contains('dark-mode');
         localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-    });
+    });    document.body.appendChild(settingsIcon);
 
-    document.body.appendChild(settingsIcon);
+    // Auto-generate sitemap at bottom of page
+    // Wait for page to load completely before adding sitemap
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', createSitemap);
+    } else {
+        createSitemap();
+    }
 }
 
 // UTILITIES -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
@@ -131,7 +134,6 @@ function format(input, preset) {
  */
 function getVW(percent = 100) {
     // Find the CSS property for Viewport Width (vw):
-
     return window.innerWidth * (percent / 100);
 }
 
@@ -143,7 +145,6 @@ function getVW(percent = 100) {
  */
 function getVH(percent = 100) {
     // Find the CSS property for Viewport Height (vh):
-
     return window.innerHeight * (percent / 100);
 }
 
@@ -161,10 +162,9 @@ async function readJson(file) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data);
         return data;
     } catch (error) {
-        console.error('The file did not fetch:', error);
+        console.error('The file did not fetch: ', error);
     }
 }
 
@@ -239,38 +239,276 @@ function onPress(key, func) {
 }
 
 
-// STYLING -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+// SITEMAP GENERATION -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
-/*window.onscroll = function() {
-    // Whenever the user scrolls (page update), run the following code:
+/**
+ * Creates a comprehensive sitemap at the bottom of the page
+ */
+function createSitemap() {
+    // Calculate the relative path to the root directory
+    const currentPath = window.location.pathname;
+    const pathDepth = currentPath.split('/').length - 2;
+    const rootPath = pathDepth > 0 ? '../'.repeat(pathDepth) : './';
+    
+    // Define the sitemap structure
+    const sitemapData = {
+        'Main Pages': [
+            { name: 'Home', url: `${rootPath}index.html`, icon: 'home-outline' },
+            { name: 'About Us', url: `${rootPath}about.html`, icon: 'people-outline' },
+            { name: 'Socials', url: `${rootPath}socials.html`, icon: 'camera-outline' },
+            { name: 'Study Log', url: `${rootPath}log.html`, icon: 'book-outline' },
+            { name: 'Calendar', url: `${rootPath}schedule.html`, icon: 'calendar-outline' },
+            { name: 'Tournaments', url: `${rootPath}tournaments.html`, icon: 'trophy-outline' }
+        ],
+        'Special Pages': [
+            { name: 'New Members', url: `${rootPath}new.html`, icon: 'person-add-outline' },
+            { name: 'Google Drive', url: `https://drive.elhssoc.com`, icon: 'logo-google' },
+            { name: 'Discord', url: `https://discord.elhssoc.com`, icon: 'logo-discord' }
+        ],
+        'Tournament Pages': [
+            { name: 'Hawk and Hornet', url: `${rootPath}tournaments_/hawkandhornet.html`, icon: 'leaf-outline' },
+            { name: 'Haslett', url: `${rootPath}tournaments_/haslett.html`, icon: 'flag-outline' },
+            { name: 'University of Michigan', url: `${rootPath}tournaments_/uofm.html`, icon: 'school-outline' },
+            { name: 'Regionals', url: `${rootPath}tournaments_/regionals.html`, icon: 'medal-outline' },
+            { name: 'States', url: `${rootPath}tournaments_/stetes.html`, icon: 'star-outline' },
+            { name: 'Nationals', url: `${rootPath}tournaments_/nationals.html`, icon: 'trophy' }
+        ],
+        'Development Features': [
+            { name: 'Games Hub', url: `${rootPath}beta/games.html`, icon: 'game-controller-outline' },
+            { name: 'Protein Game', url: `${rootPath}beta/protein.html`, icon: 'fitness-outline' }
+        ],
+    };
 
-    var container = document.querySelector('.nav-container');
-    var element = document.querySelectorAll('nav li'); // Returns list of HTML elements
-    var text = document.querySelectorAll('nav a'); // Returns list of HTML elements
+    // Create the sitemap container
+    const sitemap = document.createElement('footer');
+    sitemap.classList.add('sitemap-footer');
+    
+    sitemap.innerHTML = `
+        <div class="sitemap-container">
+            <div class="sitemap-header">
+                <h3>Site Navigation</h3>
+            </div>
+            <div class="sitemap-grid">
+                ${Object.entries(sitemapData).map(([category, pages]) => `
+                    <div class="sitemap-section">
+                        <h4>${category}</h4>
+                        <ul class="sitemap-links">
+                            ${pages.map(page => `
+                                <li>
+                                    <a href="${page.url}" class="sitemap-link">
+                                        <ion-icon name="${page.icon}"></ion-icon>
+                                        <span>${page.name}</span>
+                                    </a>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="sitemap-footer-info">
+                <div class="footer-logo">
+                    <img src="${rootPath}soLogoSmall.svg" alt="ELHSSOC Logo" class="footer-logo-img">
+                </div>
+                <div class="footer-text">
+                    <p>&copy; ${new Date().getFullYear()} East Lansing High School Science Olympiad</p>
+                    <p>Meeting Wednesdays 1:00-3:00 PM at the East Lansing Public Library</p>
+                </div>
+            </div>
+        </div>
+    `;    // Add CSS styles
+    const sitemapStyles = document.createElement('style');
+    sitemapStyles.textContent = `
+        .sitemap-header {
+            color: rgba(255, 255, 255, 0.9);
+        }
 
-    if (window.scrollY > getVH(56) && getVW() > 768) {
+        .sitemap-footer {
+            background: linear-gradient(135deg, var(--color-dark), var(--color-medium));
+            color: white;
+            margin-top: 2rem;
+            padding: 1.5rem 1rem 1rem;
+            border-top: 2px solid var(--color-light);
+            position: relative;
+            z-index: 1;
+        }
 
-        container.style.backgroundColor = 'transparent';
-        container.style.borderBottom = '4px solid var(--color-medium)';
+        .sitemap-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-        element.forEach(li => { // Cycle the list
-            li.style.backgroundColor = 'transparent';
-        })
-        text.forEach(a => { // Cycle the list
-            a.style.color = 'var(--color-dark)';
-            a.style.fontWeight = '600';
-        })
-    } else {
+        .sitemap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
 
-        container.style.backgroundColor = 'var(--color-medium)';
-        container.style.borderBottom = 'none';
+        .sitemap-section {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.8rem;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
 
-        element.forEach(li => { // Cycle the list
-            li.style.backgroundColor = 'var(--color-medium)';
-        })
-        text.forEach(a => { // Cycle the list
-            a.style.color = 'var(--white)';
-            a.style.fontWeight = '100';
-        })
+        .sitemap-section h4 {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-light);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0.3rem;
+        }
+
+        .sitemap-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sitemap-links li {
+            margin-bottom: 0.2rem;
+        }
+
+        .sitemap-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #ffffff;
+            padding: 0.3rem;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-size: 0.8rem;
+        }
+
+        .sitemap-link:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--color-light);
+        }
+
+        .sitemap-link ion-icon {
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+            min-width: 16px;
+        }
+
+        .sitemap-footer-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            flex-wrap: wrap;
+        }
+
+        .footer-logo-img {
+            height: 40px;
+            width: auto;
+            filter: brightness(0) invert(1);
+            opacity: 0.9;
+        }
+
+        .footer-text {
+            text-align: center;
+        }
+
+        .footer-text p {
+            margin: 0.2rem 0;
+            opacity: 0.8;
+            font-size: 0.8rem;
+        }
+
+        .footer-text p:first-child {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        /* Dark mode adjustments */
+        body.dark-mode .sitemap-footer {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-top-color: var(--color-light);
+        }
+
+        body.dark-mode .sitemap-section {
+            background: rgba(255, 255, 255, 0.02);
+            border-color: rgba(255, 255, 255, 0.05);
+        }
+
+        body.dark-mode .sitemap-link:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--color-light);
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .sitemap-footer {
+                padding: 1rem 0.5rem;
+            }
+            
+            .sitemap-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+            
+            .sitemap-section {
+                padding: 0.6rem;
+            }
+            
+            .sitemap-section h4 {
+                font-size: 0.8rem;
+            }
+            
+            .sitemap-link {
+                font-size: 0.75rem;
+                padding: 0.25rem;
+            }
+            
+            .sitemap-link ion-icon {
+                font-size: 0.8rem;
+            }
+            
+            .sitemap-footer-info {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+            
+            .footer-logo-img {
+                height: 35px;
+            }
+        }
+    `;
+
+    // Add styles to head if not already present
+    if (!document.querySelector('#sitemap-styles')) {
+        sitemapStyles.id = 'sitemap-styles';
+        document.head.appendChild(sitemapStyles);
     }
-}; */
+
+    // Add sitemap to the bottom of the page
+    document.body.appendChild(sitemap);
+
+    // Add click handlers for smooth navigation
+    const sitemapLinks = sitemap.querySelectorAll('.sitemap-link');
+    sitemapLinks.forEach(link => {
+        link.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const href = link.getAttribute('href');
+            
+            try {
+                // Try fetching the page without .html extension first
+                let testUrl = href.replace('.html', '');
+                let response = await fetch(testUrl);
+                if (response.ok) {
+                    window.location.href = testUrl;
+                } else {
+                    window.location.href = href;
+                }
+            } catch (error) {
+                window.location.href = href;
+            }
+        });
+    });
+}

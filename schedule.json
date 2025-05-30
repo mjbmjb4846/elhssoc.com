@@ -9,7 +9,7 @@
         "end": "2025-06-30",
         "color": "var(--color-light)",
         "textColor": "var(--text)",
-        "text": "Check out the new <u><a style=\"color:var(--text)\" href=\"https://www.soinc.org/sites/default/files/uploaded_files/2026_Event_Slate.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">2025-2026 Event Slate</a></u>!",
+        "text": "Start looking into the <u><a style=\"color:var(--text)\" href=\"https://www.soinc.org/sites/default/files/uploaded_files/2026_Event_Slate.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">2025-2026 Event Slate</a></u>!",
         "priority": 5
     },
     {
@@ -20,7 +20,7 @@
         "location": "East Lansing High School Media Center",
         "when": "Fridays During the School Year",
         "who": "SOC Members and Anyone Interested!",
-        "end": "2025-06-06"
+        "end": "2025-05-030"
     },
     {
         "hide": false,
@@ -28,9 +28,9 @@
         "color": "var(--color-light)",
         "text": "End of Year Banquet",
         "location": "Patriarche Park Pavilion",
-        "when": "June 3, 2025 (5:00pm - 7:00ish)",
-        "who": "Everyone!",
-        "prepare": "Bring a dish to share with the team! We will provide drinks and utensils.",
+        "when": "June 3, 2025 (5:00 - 7:00 PM)",
+        "who": "All members past and present!",
+        "prepare": "<a href=\"https://www.signupgenius.com/go/10C0C44AAA92CABFCC07-57122044-socend\">Bring a dish to share with the team!</a> We will provide drinks and utensils.",
         "end": "2025-06-03"
     },
     {
@@ -46,43 +46,23 @@
     {
         "hide": false,
         "type": "a",
-        "start": "2025-03-09",
-        "end": "2025-03-15",
+        "start": "2024-06-07",
+        "end": "2025-08-23",
+        "days": ["Tuesday"],
         "color": "var(--color-light)",
         "textColor": "var(--text)",
-        "text": "The regional tournament is at ELHS this Saturday! Time to show off your hard work!",
-        "priority": 1
-    },
-    {
-        "hide": true,
-        "type": "a",
-        "start": "2024-09-01",
-        "end": "2024-09-05",
-        "color": "var(--color-light)",
-        "textColor": "var(--text)",
-        "text": "Our first meeting of the school year is on Friday! Hope to see you after school in the media center!",
-        "priority": 1
-    },
-    {
-        "hide": false,
-        "type": "a",
-        "start": "2024-09-05",
-        "end": "2025-06-06",
-        "days": ["Thursday"],
-        "color": "var(--color-light)",
-        "textColor": "var(--text)",
-        "text": "Don't forget, our weekly meeting is tomorrow (Friday) right after school in the ELHS media center!",
+        "text": "Don't forget, our weekly meeting is at ELPL tomorrow (Wednesday) at 1:00 PM!",
         "priority": 2
     },
     {
         "hide": false,
         "type": "a",
-        "start": "2024-09-05",
-        "end": "2025-06-06",
-        "days": ["Friday"],
+        "start": "2024-06-07",
+        "end": "2025-08-23",
+        "days": ["Wednesday"],
         "color": "var(--color-light)",
         "textColor": "var(--text)",
-        "text": "We are meeting today after school in the ELHS media center! Hope to see you there!",
+        "text": "We are meeting today at 1:00 PM! Hope to see you at ELPL!",
         "priority": 2
     },
 
@@ -96,15 +76,14 @@
         "color": "maroon",
         "text": "No Remaining Tournaments!",
         "location": "Come to our Summer Study Meetings!",
-        "when": "The 2025 Season will Arrive Faster than you Think!",
-        "end": "2024-08-31"
+        "when": "The 2026 Season will Arrive Faster than you Think!",
+        "end": "2025-07-30"
     },
 
 
     {"note": "ARCHIVED EVENTS: ALL TYPES", "hide": true},
 
-
-    {"note": "SUMMER STUDY: ARCHIVED", "hide": true},
+    
     {
         "hide": true,
         "type": "meeting",
@@ -178,7 +157,11 @@
         "text": "We are meeting today at 1:00 PM! See you in the ELPL maker space!",
         "priority": 2
     },
+
+
     {"note": "ELPL EVENTS: ARCHIVED", "hide": true},
+
+
     {
         "hide": true,
         "type": "a",
@@ -200,7 +183,11 @@
         "link": "https://elpl.bibliocommons.com/events/66563d97b7ed963d009a17f9",
         "end": "2024-07-25"
     },
+
+
     {"note": "PLACEHOLDERS: ARCHIVED", "hide": true},
+
+
     {
         "hide": true,
         "type": "tournament",
