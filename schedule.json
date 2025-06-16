@@ -5,6 +5,16 @@
     {
         "hide": false,
         "type": "a",
+        "start": "2025-06-16",
+        "end": "2025-08-31",
+        "color": "var(--color-light)",
+        "textColor": "var(--text)",
+        "text": "Interested in coding this summer for free stuff?! <u><a style=\"color:var(--text)\" href=\"https://summer.hack.club/mv\" target=\"_blank\" rel=\"noopener noreferrer\">Check this out</a></u>!",
+        "priority": 4
+    },
+    {
+        "hide": false,
+        "type": "a",
         "start": "2025-05-05",
         "end": "2025-06-30",
         "color": "var(--color-light)",
