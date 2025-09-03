@@ -14,8 +14,9 @@ function menuInit() {
     <ul>
         <li><a href="${rootPath}index.html">Home</a></li>
         <li><a href="${rootPath}about.html">About</a></li>
+        <li><a href="${rootPath}new.html">Join Us</a></li>
         <li><a href="${rootPath}socials.html">Socials</a></li>
-        <li><a href="${rootPath}log.html">Study Log</a></li>
+        <!--<li><a href="${rootPath}log.html">Study Log</a></li>-->
         <li><a href="${rootPath}schedule.html">Calendar</a></li>
         <li><a href="${rootPath}tournaments.html">Tournaments</a></li>
     </ul>

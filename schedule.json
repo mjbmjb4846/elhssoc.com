@@ -45,6 +45,110 @@
     },
 
 
+    {
+        "hide": false,
+        "type": "event",
+        "color": "green",
+        "text": "City Scavenger Hunt",
+        "location": "East Lansing MI",
+        "when": "Fall TBD",
+        "who": "All are welcome!",
+        "end": "2025-11-15",
+        "cost": "FREE (though we may also attend ice cream and a planetarium show afterwards)",
+        "prepare": "Bring your A-game (and a friend if you wish)!"
+    },
+    {
+        "hide": false,
+        "type": "tournament",
+        "color": "gold",
+        "text": "Hawk and Hornet Invitational",
+        "location": "Troy Athens High School, Troy MI",
+        "when": "November 15, 2025",
+        "who": "Everyone",
+        "end": "2025-11-15",
+        "link": "https://miscioly.org/invitational-tournaments",
+        "prepare": "Study hard, practice well, and perfect those builds!"
+    },
+    {
+        "hide": false,
+        "type": "tournament",
+        "color": "tan",
+        "text": "Hawk and Hornet Invitational",
+        "location": "Haslett High School, Haslett MI",
+        "when": "January 24, 2026",
+        "who": "Everyone",
+        "end": "2026-01-24",
+        "link": "https://haslettsciolyinvitational.weebly.com/",
+        "prepare": "Work hard over winter break to prepare for our first tournament of 2026!"
+    },
+    {
+        "hide": false,
+        "type": "tournament",
+        "color": "var(--color-light)",
+        "text": "University of Michigan Invitational",
+        "location": "University of Michigan, Ann Arbor MI",
+        "when": "February 14, 2026",
+        "who": "Snowy Egrets only",
+        "end": "2026-02-14",
+        "link": "https://www.umichscioly.org/",
+        "prepare": "This will be our toughest competition of the season! Give it your all!"
+    },
+    {
+        "hide": false,
+        "type": "event",
+        "color": "var(--color-light-gray)",
+        "text": "SOC Spring Bake Sale",
+        "location": "Outside the Media Center",
+        "when": "Spring TBD",
+        "who": "All are welcome!",
+        "end": "2026-04-30",
+        "prepare": "Come support the team!"
+    },
+    {
+        "hide": false,
+        "type": "tournament",
+        "color": "lime",
+        "text": "Regional Tournament",
+        "location": "Haslett High School, Haslett MI",
+        "when": "March TBD",
+        "who": "Everyone",
+        "end": "2026-03-31",
+        "link": "https://www.region11miso.org/",
+        "prepare": "Let's win it back this year, EL! Go for the gold!"
+    },
+    {
+        "hide": false,
+        "type": "event",
+        "color": "var(--color-light-gray)",
+        "text": "Greenfield Village Trip",
+        "location": "Greenfield Village, Dearborn MI",
+        "when": "April TBD",
+        "who": "All are welcome!",
+        "end": "2026-04-30",
+        "cost": "TBD"
+    },
+    {
+        "hide": false,
+        "type": "tournament",
+        "color": "green",
+        "text": "State Tournament",
+        "location": "Michigan State University, East Lansing MI",
+        "when": "Spring TBD",
+        "who": "Snowy Egrets and trial event participants",
+        "end": "2026-04-30",
+        "link": "https://miscioly.org/state-tournament",
+        "prepare": "Show everyone what you've got! Bring your mastery of all of your events!"
+    },
+    {
+        "hide": false,
+        "type": "event",
+        "color": "red",
+        "text": "Many more events to come!!!",
+        "when": "TBD",
+        "end": "2028-01-01"
+    },
+
+
     {"note": "CURRENT PLACEHOLDER EVENTS: ALL TYPES", "hide": true},
 
 
