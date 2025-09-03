@@ -263,7 +263,8 @@ function createSitemap() {
         'Special Pages': [
             { name: 'New Members', url: `${rootPath}new.html`, icon: 'person-add-outline' },
             { name: 'Google Drive', url: `https://drive.elhssoc.com`, icon: 'logo-google' },
-            { name: 'Discord', url: `https://discord.elhssoc.com`, icon: 'logo-discord' }
+            { name: 'Discord', url: `https://discord.elhssoc.com`, icon: 'logo-discord' },
+            { name: '2026 Rules', url: `https://www.soinc.org/form/2026-rules-c`, icon: 'document-outline' }
         ],
         'Tournament Pages': [
             { name: 'Hawk and Hornet', url: `${rootPath}tournaments_/hawkandhornet.html`, icon: 'leaf-outline' },
@@ -311,7 +312,7 @@ function createSitemap() {
                 </div>
                 <div class="footer-text">
                     <p>&copy; ${new Date().getFullYear()} East Lansing High School Science Olympiad</p>
-                    <p>Meeting Wednesdays 1:00-3:00 PM at the East Lansing Public Library</p>
+                    <p>Meeting Fridays 2:45-4:00 PM in the ELHS Media Center</p>
                 </div>
             </div>
         </div>

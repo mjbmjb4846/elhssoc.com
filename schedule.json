@@ -1,26 +1,15 @@
 [
     {"note": "CURRENT SCHEDULED EVENTS: ALL TYPES", "hide": true},
 
-
     {
         "hide": false,
         "type": "a",
-        "start": "2025-06-16",
-        "end": "2025-08-31",
+        "start": "2025-09-02",
+        "end": "2025-09-17",
         "color": "var(--color-light)",
         "textColor": "var(--text)",
-        "text": "Interested in coding this summer for free stuff?! <u><a style=\"color:var(--text)\" href=\"https://summer.hack.club/mv\" target=\"_blank\" rel=\"noopener noreferrer\">Check this out</a></u>!",
-        "priority": 4
-    },
-    {
-        "hide": false,
-        "type": "a",
-        "start": "2025-05-05",
-        "end": "2025-06-30",
-        "color": "var(--color-light)",
-        "textColor": "var(--text)",
-        "text": "Start looking into the <u><a style=\"color:var(--text)\" href=\"https://www.soinc.org/sites/default/files/uploaded_files/2026_Event_Slate.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">2025-2026 Event Slate</a></u>!",
-        "priority": 5
+        "text": "Welcome, new members! Check out our site and snag yourself a copy of the <u><a style=\"color:var(--text)\" href=\"https://www.soinc.org/form/2026-rules-c\" target=\"_blank\" rel=\"noopener noreferrer\">rules manual</a></u>!",
+        "priority": 3
     },
     {
         "hide": false,
@@ -29,50 +18,29 @@
         "text": "Weekly Meetings",
         "location": "East Lansing High School Media Center",
         "when": "Fridays During the School Year",
-        "who": "SOC Members and Anyone Interested!",
-        "end": "2025-05-030"
-    },
-    {
-        "hide": false,
-        "type": "event",
-        "color": "var(--color-light)",
-        "text": "End of Year Banquet",
-        "location": "Patriarche Park Pavilion",
-        "when": "June 3, 2025 (5:00 - 7:00 PM)",
-        "who": "All members past and present!",
-        "prepare": "<a href=\"https://www.signupgenius.com/go/10C0C44AAA92CABFCC07-57122044-socend\">Bring a dish to share with the team!</a> We will provide drinks and utensils.",
-        "end": "2025-06-03"
-    },
-    {
-        "hide": false,
-        "type": "event",
-        "color": "#cccc00",
-        "text": "Summer Meetings",
-        "location": "East Lansing Public Library Maker Space",
-        "when": "Wednesdays 1:00 PM - 3:00 PM (Starting June 11th)",
-        "who": "Middle School and High School Science Olympiad Members",
-        "end": "2025-08-13"
+        "who": "SOC Members and anyone interested in checking us out!",
+        "end": "2026-05-29"
     },
     {
         "hide": false,
         "type": "a",
-        "start": "2024-06-07",
-        "end": "2025-08-23",
-        "days": ["Tuesday"],
+        "start": "2025-09-11",
+        "end": "2025-12-19",
+        "days": ["Thursday"],
         "color": "var(--color-light)",
         "textColor": "var(--text)",
-        "text": "Don't forget, our weekly meeting is at ELPL tomorrow (Wednesday) at 1:00 PM!",
-        "priority": 2
+        "text": "Don't forget, our weekly meeting is after school tomorrow (Friday) in the media center!",
+        "priority": 4
     },
     {
         "hide": false,
         "type": "a",
-        "start": "2024-06-07",
-        "end": "2025-08-23",
-        "days": ["Wednesday"],
+        "start": "2024-09-05",
+        "end": "2025-12-19",
+        "days": ["Friday"],
         "color": "var(--color-light)",
         "textColor": "var(--text)",
-        "text": "We are meeting today at 1:00 PM! Hope to see you at ELPL!",
+        "text": "We are meeting today at 2:45 PM! Hope to see you in the media center!",
         "priority": 2
     },
 
@@ -94,6 +62,47 @@
     {"note": "ARCHIVED EVENTS: ALL TYPES", "hide": true},
 
     
+    {
+        "hide": true,
+        "type": "event",
+        "color": "#cccc00",
+        "text": "Summer Meetings",
+        "location": "East Lansing Public Library Maker Space",
+        "when": "Wednesdays 1:00 PM - 3:00 PM (Starting June 11th)",
+        "who": "Middle School and High School Science Olympiad Members",
+        "end": "2025-08-13"
+    },
+    {
+        "hide": true,
+        "type": "event",
+        "color": "var(--color-light)",
+        "text": "End of Year Banquet",
+        "location": "Patriarche Park Pavilion",
+        "when": "June 3, 2025 (5:00 - 7:00 PM)",
+        "who": "All members past and present!",
+        "prepare": "<a href=\"https://www.signupgenius.com/go/10C0C44AAA92CABFCC07-57122044-socend\">Bring a dish to share with the team!</a> We will provide drinks and utensils.",
+        "end": "2025-06-03"
+    },
+    {
+        "hide": true,
+        "type": "a",
+        "start": "2025-06-16",
+        "end": "2025-08-31",
+        "color": "var(--color-light)",
+        "textColor": "var(--text)",
+        "text": "Interested in coding this summer for free stuff?! <u><a style=\"color:var(--text)\" href=\"https://summer.hack.club/mv\" target=\"_blank\" rel=\"noopener noreferrer\">Check this out</a></u>!",
+        "priority": 4
+    },
+    {
+        "hide": true,
+        "type": "a",
+        "start": "2025-05-05",
+        "end": "2025-06-30",
+        "color": "var(--color-light)",
+        "textColor": "var(--text)",
+        "text": "Start looking into the <u><a style=\"color:var(--text)\" href=\"https://www.soinc.org/sites/default/files/uploaded_files/2026_Event_Slate.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">2025-2026 Event Slate</a></u>!",
+        "priority": 5
+    },
     {
         "hide": true,
         "type": "meeting",
