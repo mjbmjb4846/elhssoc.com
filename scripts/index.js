@@ -26,9 +26,9 @@ function menuInit() {
     logoLink.href = `${rootPath}index.html`;
     const logoSVG = document.createElement('img');
     if (window.innerWidth > 768) {
-        logoSVG.src = `${rootPath}soLogo.svg`;
+        logoSVG.src = `${rootPath}images/logos/soLogo.svg`;
     } else {
-        logoSVG.src = `${rootPath}soLogoSmall.svg`;
+        logoSVG.src = `${rootPath}images/logos/soLogoSmall.svg`;
     }
     logoLink.classList.add("logoLink");
     logoSVG.classList.add("logoSVG");
@@ -309,7 +309,7 @@ function createSitemap() {
             </div>
             <div class="sitemap-footer-info">
                 <div class="footer-logo">
-                    <img src="${rootPath}soLogoSmall.svg" alt="ELHSSOC Logo" class="footer-logo-img">
+                    <img src="${rootPath}images/logos/soLogoSmall.svg" alt="ELHSSOC Logo" class="footer-logo-img">
                 </div>
                 <div class="footer-text">
                     <p>&copy; ${new Date().getFullYear()} East Lansing High School Science Olympiad</p>

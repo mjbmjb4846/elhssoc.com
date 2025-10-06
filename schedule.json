@@ -51,11 +51,11 @@
         "color": "green",
         "text": "City Scavenger Hunt",
         "location": "East Lansing MI",
-        "when": "Fall TBD",
+        "when": "October TBD",
         "who": "All are welcome!",
-        "end": "2025-11-15",
+        "end": "2025-10-30",
         "cost": "FREE (though we may also attend ice cream and a planetarium show afterwards)",
-        "prepare": "Bring your A-game (and a friend if you wish)!"
+        "prepare": "Bring your A-game (and a friend)!"
     },
     {
         "hide": false,
@@ -110,9 +110,9 @@
         "color": "lime",
         "text": "Regional Tournament",
         "location": "Haslett High School, Haslett MI",
-        "when": "March TBD",
+        "when": "SUNDAY March 15th 2026",
         "who": "Everyone",
-        "end": "2026-03-31",
+        "end": "2026-03-15",
         "link": "https://www.region11miso.org/",
         "prepare": "Let's win it back this year, EL! Go for the gold!"
     },
@@ -133,9 +133,9 @@
         "color": "green",
         "text": "State Tournament",
         "location": "Michigan State University, East Lansing MI",
-        "when": "Spring TBD",
+        "when": "May 16th or 17th 2026 (TBD)",
         "who": "Snowy Egrets and trial event participants",
-        "end": "2026-04-30",
+        "end": "2026-05-17",
         "link": "https://miscioly.org/state-tournament",
         "prepare": "Show everyone what you've got! Bring your mastery of all of your events!"
     },
