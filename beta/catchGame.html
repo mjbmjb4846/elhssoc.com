@@ -3,129 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catch the Falling Objects</title>
+    <title>Isotope Lab: Kinetic Injection</title>
     <style>
+        :root {
+            --bg: #020617;
+            --panel: rgba(15, 23, 42, 0.95);
+        }
+        body { 
+            background: var(--bg); 
+            color: white; 
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
         canvas {
-            background: #f0f0f0;
+            background: #000;
             display: block;
-            margin: 0 auto;
-            border: 1px solid black;
+            border-radius: 12px;
+            box-shadow: 0 0 60px rgba(0,0,0,0.9);
+            border: 1px solid #1e293b;
         }
-        body {
-            text-align: center;
-            font-family: Arial, sans-serif;
+        #ui {
+            margin-top: 25px;
+            width: 800px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        #score {
-            font-size: 20px;
+        .stat { font-size: 12px; font-weight: 800; letter-spacing: 2px; color: #64748b; }
+        #modeDisplay {
+            padding: 10px 28px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255,255,255,0.05);
         }
+        .mode-heavy { background: #991b1b; color: #fee2e2; box-shadow: 0 0 25px rgba(239, 68, 68, 0.3); }
+        .mode-light { background: #1e3a8a; color: #dbeafe; box-shadow: 0 0 25px rgba(59, 130, 246, 0.3); }
     </style>
 </head>
 <body>
-    <h1>Catch the Falling Objects</h1>
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
-    <div id="score">Score: 0</div>
+    <canvas id="gameCanvas" width="800" height="500"></canvas>
+    
+    <div id="ui">
+        <div class="stat" id="score">PURITY: 0%</div>
+        <div id="modeDisplay" class="mode-light">FILTER: LOW KINETIC (BLUE)</div>
+        <div class="stat" id="stability">STABILITY: 100%</div>
+    </div>
+
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        const basketWidth = 100;
-        const basketHeight = 20;
-        let basketX = (canvas.width - basketWidth) / 2;
-        let score = 0;
+        const TRAP_WIDTH = 135;
+        const TRAP_HEIGHT = 10;
+        const SPEED_THRESHOLD = 4.5; 
+        
+        let trapX = (canvas.width - TRAP_WIDTH) / 2;
+        let trapVel = 0;
+        let purity = 0;
+        let stability = 100;
+        let filterMode = 'LIGHT'; 
+        
+        const particles = [];
+        let singularity = null;
+        let keys = {};
 
-        const objectRadius = 10;
-        const objects = [];
+        window.addEventListener('keydown', e => { 
+            keys[e.code] = true;
+            if(e.code === 'Space') toggleFilter();
+        });
+        window.addEventListener('keyup', e => keys[e.code] = false);
 
-        let rightPressed = false;
-        let leftPressed = false;
-
-        document.addEventListener('keydown', keyDownHandler, false);
-        document.addEventListener('keyup', keyUpHandler, false);
-
-        function keyDownHandler(e) {
-            if (e.key === 'Right' || e.key === 'ArrowRight') {
-                rightPressed = true;
-            } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
-                leftPressed = true;
-            }
+        function toggleFilter() {
+            filterMode = filterMode === 'HEAVY' ? 'LIGHT' : 'HEAVY';
+            const display = document.getElementById('modeDisplay');
+            display.innerText = filterMode === 'HEAVY' ? "FILTER: HIGH KINETIC (RED)" : "FILTER: LOW KINETIC (BLUE)";
+            display.className = filterMode === 'HEAVY' ? "mode-heavy" : "mode-light";
         }
 
-        function keyUpHandler(e) {
-            if (e.key === 'Right' || e.key === 'ArrowRight') {
-                rightPressed = false;
-            } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
-                leftPressed = false;
-            }
+        function createParticle() {
+            // Injection Mix: 50% Red (Fast), 50% Blue (Slow)
+            const isHeavy = Math.random() < 0.5;
+            particles.push({
+                x: Math.random() * (canvas.width - 100) + 50,
+                y: -25,
+                vx: (Math.random() - 0.5) * 1.5,
+                vy: isHeavy ? (5 + Math.random() * 1) : (2 + Math.random() * 1),
+                radius: 5
+            });
         }
 
-        function drawBasket() {
-            ctx.beginPath();
-            ctx.rect(basketX, canvas.height - basketHeight, basketWidth, basketHeight);
-            ctx.fillStyle = '#0095DD';
-            ctx.fill();
-            ctx.closePath();
+        function spawnSingularity() {
+            singularity = {
+                x: 200 + Math.random() * (canvas.width - 400),
+                y: 150 + Math.random() * (canvas.height - 300),
+                strength: 750,
+                life: 350
+            };
         }
 
-        function drawObject(object) {
-            ctx.beginPath();
-            ctx.arc(object.x, object.y, objectRadius, 0, Math.PI * 2);
-            ctx.fillStyle = '#FF0000';
-            ctx.fill();
-            ctx.closePath();
-        }
-
-        function generateObject() {
-            const x = Math.random() * (canvas.width - objectRadius * 2) + objectRadius;
-            objects.push({ x: x, y: objectRadius, dy: 2 });
-        }
-
-        function updateObjects() {
-            for (let i = 0; i < objects.length; i++) {
-                objects[i].y += objects[i].dy;
-
-                if (objects[i].y + objectRadius > canvas.height - basketHeight) {
-                    if (objects[i].x > basketX && objects[i].x < basketX + basketWidth) {
-                        score++;
-                        objects.splice(i, 1);
-                        i--;
-                    } else if (objects[i].y + objectRadius > canvas.height) {
-                        score--;
-                        objects.splice(i, 1);
-                        i--;
-                    }
-                }
-            }
-        }
-
-        function drawObjects() {
-            for (const object of objects) {
-                drawObject(object);
-            }
-        }
-
-        function drawScore() {
-            document.getElementById('score').innerText = `Score: ${score}`;
+        function getKineticColor(speed) {
+            // Map 1.5 - 7.5 speed range to Blue-Red spectrum
+            const t = Math.min(1, Math.max(0, (speed - 1.5) / 6));
+            const r = Math.floor(59 * (1 - t) + 239 * t);
+            const g = Math.floor(130 * (1 - t) + 68 * t);
+            const b = Math.floor(246 * (1 - t) + 68 * t);
+            return `rgb(${r}, ${g}, ${b})`;
         }
 
         function update() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (keys['ArrowRight']) trapVel += 1.3;
+            if (keys['ArrowLeft']) trapVel -= 1.3;
+            trapVel *= 0.82;
+            trapX += trapVel;
+            trapX = Math.max(0, Math.min(canvas.width - TRAP_WIDTH, trapX));
 
-            drawBasket();
-            drawObjects();
-            drawScore();
-
-            updateObjects();
-
-            if (rightPressed && basketX < canvas.width - basketWidth) {
-                basketX += 7;
-            } else if (leftPressed && basketX > 0) {
-                basketX -= 7;
+            if (singularity) {
+                singularity.life--;
+                if (singularity.life <= 0) singularity = null;
+            } else if (Math.random() < 0.007) {
+                spawnSingularity();
             }
 
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+
+                if (singularity) {
+                    const dx = singularity.x - p.x;
+                    const dy = singularity.y - p.y;
+                    const distSq = dx*dx + dy*dy;
+                    const dist = Math.sqrt(distSq);
+                    if (dist > 10) {
+                        const force = singularity.strength / distSq;
+                        p.vx += (dx / dist) * force;
+                        p.vy += (dy / dist) * force;
+                    }
+                }
+
+                p.x += p.vx;
+                p.y += p.vy;
+                
+                const speed = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
+                const pType = speed > SPEED_THRESHOLD ? 'HEAVY' : 'LIGHT';
+
+                // Particle vs Collector Interaction
+                if (p.y + p.radius > canvas.height - 25) {
+                    if (p.x > trapX && p.x < trapX + TRAP_WIDTH && p.y < canvas.height - 5) {
+                        if (pType === filterMode) {
+                            purity += 2;
+                            stability = Math.min(100, stability + 1.5);
+                        } else {
+                            purity = Math.max(0, purity - 8);
+                            stability -= 18;
+                        }
+                        particles.splice(i, 1);
+                        continue;
+                    }
+                }
+
+                // Bounds check
+                if (p.y > canvas.height || p.x < -150 || p.x > canvas.width + 150) {
+                    if (pType === filterMode) stability -= 6;
+                    particles.splice(i, 1);
+                }
+            }
+
+            if (stability <= 0) {
+                alert(`CONTAINMENT BREACH. Final Enrichment Purity: ${purity}%`);
+                purity = 0; stability = 100; particles.length = 0; singularity = null;
+            }
+
+            draw();
             requestAnimationFrame(update);
         }
 
-        setInterval(generateObject, 1000);
+        function draw() {
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Singularity Visuals
+            if (singularity) {
+                const glowPulse = 15 + Math.sin(Date.now() / 150) * 5;
+                ctx.shadowBlur = glowPulse;
+                ctx.shadowColor = '#a855f7';
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.arc(singularity.x, singularity.y, 10, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                
+                ctx.strokeStyle = 'rgba(168, 85, 247, 0.3)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.arc(singularity.x, singularity.y, 30 + glowPulse, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            // Collector
+            ctx.fillStyle = filterMode === 'HEAVY' ? '#ef4444' : '#3b82f6';
+            ctx.beginPath();
+            ctx.roundRect(trapX, canvas.height - 20, TRAP_WIDTH, TRAP_HEIGHT, 4);
+            ctx.fill();
+
+            // Particles with Velocity Tails
+            particles.forEach(p => {
+                const speed = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
+                const color = getKineticColor(speed);
+                
+                ctx.globalAlpha = 0.4;
+                ctx.strokeStyle = color;
+                ctx.lineWidth = p.radius * 1.5;
+                ctx.beginPath();
+                ctx.moveTo(p.x, p.y);
+                ctx.lineTo(p.x - p.vx * 2, p.y - p.vy * 2);
+                ctx.stroke();
+                
+                ctx.globalAlpha = 1.0;
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            document.getElementById('score').innerText = `PURITY: ${purity}%`;
+            document.getElementById('stability').innerText = `STABILITY: ${Math.max(0, Math.floor(stability))}%`;
+            document.getElementById('stability').style.color = stability < 30 ? '#ef4444' : '#64748b';
+        }
+
+        setInterval(createParticle, 650);
         update();
     </script>
 </body>

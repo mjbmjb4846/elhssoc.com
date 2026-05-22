@@ -19,8 +19,11 @@
 
         <script>
             const alex = document.getElementById("alex");
+            let isInverted = false;
             onPress('Enter', function() {
-                alex.classList.toggle("gform");
+                isInverted = !isInverted;
+                if (isInverted) alex.style.filter = "none";
+                else alex.style.filter = "invert(1) hue-rotate(180deg)";
             });
         </script>
 

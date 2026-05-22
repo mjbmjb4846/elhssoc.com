@@ -1,16 +1,65 @@
 [
-    {"note": "CURRENT SCHEDULED EVENTS: ALL TYPES", "hide": true},
+    {"note": "2026-2027 EVENTS", "hide": true},
 
+
+    {
+        "hide": true,
+        "type": "meeting",
+        "color": "var(--color-light)",
+        "text": "Weekly Meetings",
+        "location": "East Lansing High School Media Center",
+        "when": "Fridays During the School Year",
+        "who": "All SOC Members and anyone interested in the team!",
+        "end": "2027-05-28"
+    },
+    {
+        "hide": false,
+        "type": "event",
+        "color": "#cccc00",
+        "text": "Summer Meetings",
+        "location": "East Lansing Public Library Maker Space",
+        "when": "TBD",
+        "who": "Middle School and High School Science Olympiad Members",
+        "end": "2026-08-15"
+    },
     {
         "hide": false,
         "type": "a",
-        "start": "2025-09-02",
-        "end": "2025-09-17",
+        "start": "2026-05-17",
+        "end": "2026-05-23",
         "color": "var(--color-light)",
         "textColor": "var(--text)",
-        "text": "Welcome, new members! Check out our site and snag yourself a copy of the <u><a style=\"color:var(--text)\" href=\"https://www.soinc.org/form/2026-rules-c\" target=\"_blank\" rel=\"noopener noreferrer\">rules manual</a></u>!",
-        "priority": 3
+        "text": "Talk to Ben about the <u><a style=\"color:var(--text)\" href=\"https://scav.elso.win\" target=\"_blank\" rel=\"noopener noreferrer\">scavenger hunt</a></u> this Saturday! (Come play!)",
+        "priority": 1
     },
+    {
+        "hide": false,
+        "type": "event",
+        "color": "green",
+        "text": "Ben and Joe's Scavenger Hunt",
+        "location": "Michigan State University & East Lansing MI",
+        "when": "May 23, 2026",
+        "who": "All are welcome! Please come compete!",
+        "end": "2026-05-23",
+        "cost": "FREE (though we will also grab Dairy Store ice cream afterwards ~$4)",
+        "prepare": "Bring your A-game (feel free to bring a friend too)!"
+    },
+    {
+        "hide": false,
+        "type": "event",
+        "color": "var(--color-light-gray)",
+        "text": "Greenfield Village Trip",
+        "location": "Greenfield Village, Dearborn MI",
+        "when": "April TBD",
+        "who": "All are welcome!",
+        "end": "2027-04-30",
+        "cost": "TBD ~$35"
+    },
+
+    
+    {"note": "2025-2026 EVENTS", "hide": true},
+
+    
     {
         "hide": false,
         "type": "meeting",
@@ -22,7 +71,17 @@
         "end": "2026-05-29"
     },
     {
-        "hide": false,
+        "hide": true,
+        "type": "a",
+        "start": "2025-09-02",
+        "end": "2025-09-17",
+        "color": "var(--color-light)",
+        "textColor": "var(--text)",
+        "text": "Welcome, new members! Check out our site and snag yourself a copy of the <u><a style=\"color:var(--text)\" href=\"https://www.soinc.org/form/2026-rules-c\" target=\"_blank\" rel=\"noopener noreferrer\">rules manual</a></u>!",
+        "priority": 3
+    },
+    {
+        "hide": true,
         "type": "a",
         "start": "2025-09-11",
         "end": "2025-12-19",
@@ -33,7 +92,7 @@
         "priority": 4
     },
     {
-        "hide": false,
+        "hide": true,
         "type": "a",
         "start": "2024-09-05",
         "end": "2025-12-19",
@@ -43,10 +102,8 @@
         "text": "We are meeting today at 2:45 PM! Hope to see you in the media center!",
         "priority": 2
     },
-
-
     {
-        "hide": false,
+        "hide": true,
         "type": "event",
         "color": "green",
         "text": "City Scavenger Hunt",
@@ -58,7 +115,7 @@
         "prepare": "Bring your A-game (and a friend)!"
     },
     {
-        "hide": false,
+        "hide": true,
         "type": "tournament",
         "color": "gold",
         "text": "Hawk and Hornet Invitational",
@@ -70,7 +127,7 @@
         "prepare": "Study hard, practice well, and perfect those builds!"
     },
     {
-        "hide": false,
+        "hide": true,
         "type": "tournament",
         "color": "tan",
         "text": "Haslett Invitational",
@@ -82,7 +139,7 @@
         "prepare": "Work hard over winter break to prepare for our first tournament of 2026!"
     },
     {
-        "hide": false,
+        "hide": true,
         "type": "tournament",
         "color": "var(--color-light)",
         "text": "University of Michigan Invitational",
@@ -94,7 +151,7 @@
         "prepare": "This will be our toughest competition of the season! Give it your all!"
     },
     {
-        "hide": false,
+        "hide": true,
         "type": "event",
         "color": "var(--color-light-gray)",
         "text": "SOC Spring Bake Sale",
@@ -105,7 +162,7 @@
         "prepare": "Come support the team!"
     },
     {
-        "hide": false,
+        "hide": true,
         "type": "tournament",
         "color": "lime",
         "text": "Regional Tournament",
@@ -117,7 +174,7 @@
         "prepare": "Let's win it back this year, EL! Go for the gold!"
     },
     {
-        "hide": false,
+        "hide": true,
         "type": "event",
         "color": "var(--color-light-gray)",
         "text": "Greenfield Village Trip",
@@ -128,7 +185,7 @@
         "cost": "TBD"
     },
     {
-        "hide": false,
+        "hide": true,
         "type": "tournament",
         "color": "green",
         "text": "State Tournament",
@@ -140,7 +197,7 @@
         "prepare": "Go for the gold! Bring your mastery of all of your events!"
     },
     {
-        "hide": false,
+        "hide": true,
         "type": "tournament",
         "color": "gold",
         "text": "National Tournament",
@@ -152,7 +209,7 @@
         "prepare": "With time and dedication to your events, you can accomplish great things!"
     },
     {
-        "hide": false,
+        "hide": true,
         "type": "event",
         "color": "red",
         "text": "Many more events to come!!!",

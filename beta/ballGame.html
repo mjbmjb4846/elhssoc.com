@@ -3,336 +3,435 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Fun Bouncing Ball Physics Game</title>
+    <title>Galactic Pro: Momentum Lab</title>
     <style>
-        body { margin: 0; overflow: hidden; background-color: #1a1a2e; }
-        canvas { display: block; }
-        #info { position: absolute; top: 10px; left: 10px; color: #fff; font-family: Arial, sans-serif; background-color: rgba(0,0,0,0.5); padding: 5px; border-radius: 5px; }
-        #toolSelector { position: absolute; top: 10px; right: 10px; }
+        :root {
+            --bg: #020617;
+            --cyan: #22d3ee;
+            --emerald: #10b981;
+            --panel: rgba(15, 23, 42, 0.95);
+        }
+        body { margin: 0; overflow: hidden; background: var(--bg); font-family: 'Inter', sans-serif; color: white; }
+        canvas { display: block; cursor: crosshair; }
+        
+        #hud {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .metric-row { display: flex; gap: 10px; }
+        .metric {
+            background: var(--panel);
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.05);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .hint {
+            position: absolute;
+            bottom: 100px;
+            width: 100%;
+            text-align: center;
+            color: #475569;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            pointer-events: none;
+        }
+
+        #score-card {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(2, 6, 23, 0.72);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 180ms ease;
+        }
+
+        #score-card.is-visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .score-card-panel {
+            width: min(420px, calc(100vw - 32px));
+            background: rgba(15, 23, 42, 0.96);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            padding: 28px;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+            text-align: center;
+        }
+
+        .score-card-kicker {
+            color: var(--emerald);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .score-card-score {
+            font-size: 44px;
+            line-height: 1;
+            font-weight: 900;
+            margin: 0 0 10px;
+        }
+
+        .score-card-meta {
+            color: #cbd5e1;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+
+        .score-card-button {
+            appearance: none;
+            border: none;
+            border-radius: 999px;
+            padding: 12px 18px;
+            font: inherit;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: #020617;
+            background: linear-gradient(135deg, #22d3ee, #34d399);
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+    <div id="hud">
+        <div class="metric-row">
+            <div class="metric" id="m-time">TIME: 0.00s</div>
+            <div class="metric" id="m-strokes">STROKES: 0</div>
+        </div>
+        <div class="metric-row">
+            <div class="metric" id="m-score" style="color: var(--cyan)">SCORE: 0</div>
+            <div class="metric" id="m-beams">BEAMS: 0/3</div>
+        </div>
+    </div>
+    <div class="hint">Hit the ball • Reach the goal • Do it fast</div>
+    <div id="score-card" aria-live="polite" aria-hidden="true">
+        <div class="score-card-panel">
+            <div class="score-card-kicker">Mission Complete</div>
+            <div class="score-card-score" id="final-score">0</div>
+            <div class="score-card-meta" id="final-details"></div>
+            <button type="button" class="score-card-button" id="restart-btn">Play Again</button>
+        </div>
+    </div>
     <canvas id="gameCanvas"></canvas>
-    <div id="info"></div>
-    <label for="toolSelector" style="position:absolute;top:10px;right:120px;color:#fff;font-family:Arial,sans-serif;background-color:rgba(0,0,0,0.5);padding:5px;border-radius:5px;">Drawing Tool:</label>
-    <select id="toolSelector" aria-label="Drawing Tool">
-        <option value="scribble">Scribble</option>
-        <option value="line">Straight Line</option>
-    </select>
+
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-        const info = document.getElementById('info');
-        const toolSelector = document.getElementById('toolSelector');
-
+        const scoreCard = document.getElementById('score-card');
+        const finalScore = document.getElementById('final-score');
+        const finalDetails = document.getElementById('final-details');
+        const restartBtn = document.getElementById('restart-btn');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        let ball = { x: 100, y: 100, radius: 10, vx: 0, vy: 0 };
-        let goal = { x: 0, y: 0, radius: 20 };
-        let lines = [];
-        let barriers = [];
-        let bouncePad = { x: 0, y: canvas.height - 20, width: canvas.width, height: 20 };
-        let isDrawing = false;
-        let startTime = Date.now();
-        let strokes = 0;
-        let currentPath = [];
+        // Physics Constants
+        const GRAVITY = 0.35;
+        const FRICTION_AIR = 0.994;
+        const BOUNCE = 0.7;
+        const MAX_LINES = 3;
+        const FLOOR_Y = 80;
+        const BALL_MASS = 0.1; // Tiny mass
+        const GOAL_MASS = 50.0; // Huge mass
 
-        const bounceFactor = -1.2;
-        const barrierSize = 50;
-        const gravity = 0.2;
-        const friction = 0.99;
-        const restThreshold = 0.1;
+        let ball = { x: 100, y: 100, radius: 14, vx: 0, vy: 0, onGround: false, mass: BALL_MASS };
+        let goal = { x: 0, y: 0, radius: 40, vx: 1, vy: 0.5, mass: GOAL_MASS };
+        let mouse = { x: 0, y: 0, lx: 0, ly: 0, vx: 0, vy: 0 };
+        let lines = [], stars = [], blocks = [];
+        let activeLine = null, startTime = Date.now(), strokes = 0, gameWon = false, gameResult = null;
 
-        function randomGoal() {
-            goal.x = Math.random() * (canvas.width - 40) + 20;
-            goal.y = Math.random() * (canvas.height - 100) + 20;
-        }
+        for(let i=0; i<150; i++) stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*2, o: Math.random() });
 
-        function createBarriers() {
-            barriers = [];
-            const numBarriers = Math.floor(Math.random() * 5) + 1;
-            for (let i = 0; i < numBarriers; i++) {
-                barriers.push({
-                    x: Math.random() * (canvas.width - barrierSize),
-                    y: Math.random() * (canvas.height - 100 - barrierSize),
-                    size: barrierSize
+        function createLevel() {
+            goal.x = canvas.width - 150;
+            goal.y = canvas.height / 2;
+            blocks = [];
+            const count = Math.floor(Math.random() * 7) + 3;
+            for(let i=0; i<count; i++) {
+                let size = 40 + Math.random() * 40;
+                blocks.push({
+                    x: 250 + Math.random() * (canvas.width - 500),
+                    y: 100 + Math.random() * (canvas.height - 300),
+                    w: size, h: size,
+                    vx: (Math.random()-0.5)*2, vy: (Math.random()-0.5)*2,
+                    angle: Math.random() * Math.PI,
+                    rv: (Math.random()-0.5)*0.05,
+                    mass: size / 8 // Blocks are significantly heavier than the ball
                 });
             }
         }
 
-        function drawBall() {
-            ctx.beginPath();
-            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-            ctx.fillStyle = '#ff6b6b';
-            ctx.fill();
-            ctx.strokeStyle = '#c44d56';
-            ctx.lineWidth = 2;
-            ctx.stroke();
+        // 1D Elastic Collision for momentum transfer
+        function resolveMomentum(obj1, obj2) {
+            const m1 = obj1.mass;
+            const m2 = obj2.mass;
+            
+            const newVx1 = (obj1.vx * (m1 - m2) + (2 * m2 * obj2.vx)) / (m1 + m2);
+            const newVy1 = (obj1.vy * (m1 - m2) + (2 * m2 * obj2.vy)) / (m1 + m2);
+            const newVx2 = (obj2.vx * (m2 - m1) + (2 * m1 * obj1.vx)) / (m1 + m2);
+            const newVy2 = (obj2.vy * (m2 - m1) + (2 * m1 * obj1.vy)) / (m1 + m2);
+
+            obj1.vx = newVx1; obj1.vy = newVy1;
+            obj2.vx = newVx2; obj2.vy = newVy2;
         }
 
-        function drawGoal() {
-            ctx.beginPath();
-            ctx.arc(goal.x, goal.y, goal.radius, 0, Math.PI * 2);
-            ctx.fillStyle = '#4ecdc4';
-            ctx.fill();
-            ctx.strokeStyle = '#45b7aa';
-            ctx.lineWidth = 2;
-            ctx.stroke();
+        function resolveBlockCollision(blockA, blockB) {
+            const ax2 = blockA.x + blockA.w;
+            const ay2 = blockA.y + blockA.h;
+            const bx2 = blockB.x + blockB.w;
+            const by2 = blockB.y + blockB.h;
+
+            const overlapX = Math.min(ax2, bx2) - Math.max(blockA.x, blockB.x);
+            const overlapY = Math.min(ay2, by2) - Math.max(blockA.y, blockB.y);
+            if (overlapX <= 0 || overlapY <= 0) return;
+
+            const aCenterX = blockA.x + blockA.w / 2;
+            const aCenterY = blockA.y + blockA.h / 2;
+            const bCenterX = blockB.x + blockB.w / 2;
+            const bCenterY = blockB.y + blockB.h / 2;
+            const invMassA = 1 / blockA.mass;
+            const invMassB = 1 / blockB.mass;
+            const invMassTotal = invMassA + invMassB;
+
+            if (overlapX < overlapY) {
+                const direction = aCenterX < bCenterX ? -1 : 1;
+                blockA.x += direction * overlapX * (invMassA / invMassTotal);
+                blockB.x -= direction * overlapX * (invMassB / invMassTotal);
+                const oldVxA = blockA.vx;
+                const oldVxB = blockB.vx;
+                blockA.vx = (oldVxA * (blockA.mass - blockB.mass) + 2 * blockB.mass * oldVxB) / (blockA.mass + blockB.mass);
+                blockB.vx = (oldVxB * (blockB.mass - blockA.mass) + 2 * blockA.mass * oldVxA) / (blockA.mass + blockB.mass);
+            } else {
+                const direction = aCenterY < bCenterY ? -1 : 1;
+                blockA.y += direction * overlapY * (invMassA / invMassTotal);
+                blockB.y -= direction * overlapY * (invMassB / invMassTotal);
+                const oldVyA = blockA.vy;
+                const oldVyB = blockB.vy;
+                blockA.vy = (oldVyA * (blockA.mass - blockB.mass) + 2 * blockB.mass * oldVyB) / (blockA.mass + blockB.mass);
+                blockB.vy = (oldVyB * (blockB.mass - blockA.mass) + 2 * blockA.mass * oldVyA) / (blockA.mass + blockB.mass);
+            }
         }
 
-        function drawLines() {
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
-            ctx.lineWidth = 3;
+        function showScoreCard(totalTime, totalStrokes) {
+            const score = Math.ceil(totalTime * (1 + totalStrokes) * 100);
+            gameWon = true;
+            gameResult = { totalTime, totalStrokes, score };
+            finalScore.innerText = score;
+            finalDetails.innerText = `Time: ${totalTime.toFixed(2)}s\nStrokes: ${totalStrokes}`;
+            scoreCard.classList.add('is-visible');
+            scoreCard.setAttribute('aria-hidden', 'false');
+        }
 
-            lines.forEach(line => {
-                if (Array.isArray(line)) {
-                    // Scribble
-                    ctx.beginPath();
-                    ctx.moveTo(line[0].x, line[0].y);
-                    for (let i = 1; i < line.length; i++) {
-                        ctx.lineTo(line[i].x, line[i].y);
-                    }
-                    ctx.stroke();
-                } else {
-                    // Straight line
-                    ctx.beginPath();
-                    ctx.moveTo(line.x1, line.y1);
-                    ctx.lineTo(line.x2, line.y2);
-                    ctx.stroke();
+        function hideScoreCard() {
+            scoreCard.classList.remove('is-visible');
+            scoreCard.setAttribute('aria-hidden', 'true');
+        }
+
+        function resolveBallLine(line) {
+            const dx = line.x2 - line.x1, dy = line.y2 - line.y1, l2 = dx*dx + dy*dy;
+            if (l2 === 0) return;
+            let t = Math.max(0, Math.min(1, ((ball.x-line.x1)*dx + (ball.y-line.y1)*dy)/l2));
+            const cx = line.x1 + t*dx, cy = line.y1 + t*dy;
+            const dist = Math.sqrt((ball.x-cx)**2 + (ball.y-cy)**2);
+            if (dist < ball.radius) {
+                const nx = -(dy/Math.sqrt(l2)), ny = (dx/Math.sqrt(l2));
+                const vdn = ball.vx*nx + ball.vy*ny;
+                const pushDir = vdn <= 0 ? 1 : -1;
+                ball.x += nx * (ball.radius - dist) * pushDir;
+                ball.y += ny * (ball.radius - dist) * pushDir;
+                if (vdn * pushDir < 0) {
+                    ball.vx = (ball.vx - 2*vdn*nx) * BOUNCE;
+                    ball.vy = (ball.vy - 2*vdn*ny) * BOUNCE;
                 }
-            });
-        }
-
-        function drawBouncePad() {
-            ctx.fillStyle = '#feca57';
-            ctx.fillRect(bouncePad.x, bouncePad.y, bouncePad.width, bouncePad.height);
-            ctx.strokeStyle = '#ff9ff3';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(bouncePad.x, bouncePad.y, bouncePad.width, bouncePad.height);
-        }
-
-        function drawBarriers() {
-            ctx.fillStyle = '#54a0ff';
-            barriers.forEach(barrier => {
-                ctx.fillRect(barrier.x, barrier.y, barrier.size, barrier.size);
-                ctx.strokeStyle = '#5f27cd';
-                ctx.lineWidth = 2;
-                ctx.strokeRect(barrier.x, barrier.y, barrier.size, barrier.size);
-            });
+            }
         }
 
         function update() {
-            if (Math.abs(ball.vy) > restThreshold || !isOnSurface()) {
-                ball.vy += gravity;
-            } else {
-                ball.vy = 0;
-                ball.vx *= friction;
+            if (gameWon) return;
+
+            mouse.vx = mouse.x - mouse.lx; mouse.vy = mouse.y - mouse.ly;
+            
+            if (Math.sqrt((mouse.x-ball.x)**2 + (mouse.y-ball.y)**2) < ball.radius + 20) {
+                if (Math.sqrt(mouse.vx**2 + mouse.vy**2) > 2) {
+                    if (ball.onGround) strokes++;
+                    ball.vx += mouse.vx * 0.6; ball.vy += mouse.vy * 0.6;
+                }
             }
 
-            ball.x += ball.vx;
-            ball.y += ball.vy;
+            // Goal movement and Block-Goal Collision
+            goal.x += goal.vx; goal.y += goal.vy;
+            if (goal.x < goal.radius) { goal.x = goal.radius; goal.vx *= -1; }
+            if (goal.x > canvas.width-goal.radius) { goal.x = canvas.width-goal.radius; goal.vx *= -1; }
+            if (goal.y < goal.radius) { goal.y = goal.radius; goal.vy *= -1; }
+            if (goal.y > canvas.height-FLOOR_Y-goal.radius) { goal.y = canvas.height-FLOOR_Y-goal.radius; goal.vy *= -1; }
 
-            checkWallCollision();
-            checkBarrierCollision();
-            checkBouncePadCollision();
-            checkLineCollision();
+            blocks.forEach(b => {
+                b.x += b.vx; b.y += b.vy; b.angle += b.rv;
+                if (b.x < 0) { b.x = 0; b.vx *= -1; }
+                if (b.x > canvas.width-b.w) { b.x = canvas.width-b.w; b.vx *= -1; }
+                if (b.y < 0) { b.y = 0; b.vy *= -1; }
+                if (b.y > canvas.height-FLOOR_Y-b.h) { b.y = canvas.height-FLOOR_Y-b.h; b.vy *= -1; }
 
-            const dx = ball.x - goal.x;
-            const dy = ball.y - goal.y;
-            if (Math.sqrt(dx * dx + dy * dy) < ball.radius + goal.radius) {
-                const time = ((Date.now() - startTime) / 1000).toFixed(2);
-                alert(`🎉 Goal reached! Time: ${time}s, Strokes: ${strokes} 🎉`);
-                resetGame();
-            }
+                // Collide Goal with Blocks (Goal is essentially an unstoppable force)
+                const gcx = goal.x, gcy = goal.y;
+                const bcx = b.x + b.w/2, bcy = b.y + b.h/2;
+                if (gcx + goal.radius > b.x && gcx - goal.radius < b.x + b.w && 
+                    gcy + goal.radius > b.y && gcy - goal.radius < b.y + b.h) {
+                    resolveMomentum(goal, b);
+                }
 
-            ball.vx *= 0.995;
-            ball.vy *= 0.995;
-        }
-
-        function isOnSurface() {
-            return checkBarrierCollision(true) || checkBouncePadCollision(true);
-        }
-
-        function checkWallCollision() {
-            if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
-                ball.vx *= -0.8;
-                ball.x = ball.x - ball.radius < 0 ? ball.radius : canvas.width - ball.radius;
-            }
-            if (ball.y - ball.radius < 0) {
-                ball.vy *= -0.8;
-                ball.y = ball.radius;
-            }
-        }
-
-        function checkBarrierCollision(checkOnly = false) {
-            let collided = false;
-            barriers.forEach(barrier => {
-                if (ball.x + ball.radius > barrier.x && ball.x - ball.radius < barrier.x + barrier.size &&
-                    ball.y + ball.radius > barrier.y && ball.y - ball.radius < barrier.y + barrier.size) {
-                    collided = true;
-                    if (checkOnly) return;
-
-                    const overlapLeft = (ball.x + ball.radius) - barrier.x;
-                    const overlapRight = (barrier.x + barrier.size) - (ball.x - ball.radius);
-                    const overlapTop = (ball.y + ball.radius) - barrier.y;
-                    const overlapBottom = (barrier.y + barrier.size) - (ball.y - ball.radius);
-
-                    const minOverlap = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
-
-                    if (minOverlap === overlapLeft) {
-                        ball.x = barrier.x - ball.radius;
-                        ball.vx = Math.abs(ball.vx) * -0.8;
-                    } else if (minOverlap === overlapRight) {
-                        ball.x = barrier.x + barrier.size + ball.radius;
-                        ball.vx = Math.abs(ball.vx) * 0.8;
-                    } else if (minOverlap === overlapTop) {
-                        ball.y = barrier.y - ball.radius;
-                        ball.vy = Math.abs(ball.vy) * -0.8;
-                    } else if (minOverlap === overlapBottom) {
-                        ball.y = barrier.y + barrier.size + ball.radius;
-                        ball.vy = Math.abs(ball.vy) * 0.8;
+                // Collide with ball
+                if (ball.x + ball.radius > b.x && ball.x - ball.radius < b.x + b.w && 
+                    ball.y + ball.radius > b.y && ball.y - ball.radius < b.y + b.h) {
+                    const oldVx = ball.vx;
+                    const oldVy = ball.vy;
+                    
+                    if (Math.abs(ball.x - bcx) > Math.abs(ball.y - bcy)) {
+                        ball.x = ball.x < bcx ? b.x - ball.radius : b.x + b.w + ball.radius;
+                    } else {
+                        ball.y = ball.y < bcy ? b.y - ball.radius : b.y + b.h + ball.radius;
                     }
+                    resolveMomentum(ball, b);
+                    b.rv += (oldVx * 0.001); // Spin based on ball speed
                 }
             });
-            return collided;
-        }
 
-        function checkBouncePadCollision(checkOnly = false) {
-            if (ball.x + ball.radius > bouncePad.x && ball.x - ball.radius < bouncePad.x + bouncePad.width &&
-                ball.y + ball.radius > bouncePad.y) {
-                if (checkOnly) return true;
-
-                ball.y = bouncePad.y - ball.radius;
-                ball.vy *= bounceFactor;
-                ball.vx += (Math.random() - 0.5) * 2;
-                return true;
-            }
-            return false;
-        }
-
-        function checkLineCollision() {
-            lines.forEach(line => {
-                if (Array.isArray(line)) {
-                    // Scribble collision
-                    for (let i = 1; i < line.length; i++) {
-                        checkLineSegmentCollision(line[i-1], line[i]);
-                    }
-                } else {
-                    // Straight line collision
-                    checkLineSegmentCollision(
-                        {x: line.x1, y: line.y1},
-                        {x: line.x2, y: line.y2}
-                    );
-                }
-            });
-        }
-
-        function checkLineSegmentCollision(start, end) {
-            const dx = end.x - start.x;
-            const dy = end.y - start.y;
-            const len = Math.sqrt(dx * dx + dy * dy);
-            const normal = { x: -dy / len, y: dx / len };
-
-            const ballToLineStart = { x: ball.x - start.x, y: ball.y - start.y };
-            const projection = (ballToLineStart.x * dx + ballToLineStart.y * dy) / len;
-
-            if (projection > 0 && projection < len) {
-                const closestPoint = {
-                    x: start.x + (dx * projection) / len,
-                    y: start.y + (dy * projection) / len
-                };
-
-                const distance = Math.sqrt(
-                    Math.pow(ball.x - closestPoint.x, 2) + Math.pow(ball.y - closestPoint.y, 2)
-                );
-
-                if (distance < ball.radius) {
-                    const dot = ball.vx * normal.x + ball.vy * normal.y;
-                    ball.vx = ball.vx - 2 * dot * normal.x;
-                    ball.vy = ball.vy - 2 * dot * normal.y;
-
-                    const pushDistance = ball.radius - distance;
-                    ball.x += normal.x * pushDistance;
-                    ball.y += normal.y * pushDistance;
-
-                    ball.vx *= 0.98;
-                    ball.vy *= 0.98;
+            for (let i = 0; i < blocks.length; i++) {
+                for (let j = i + 1; j < blocks.length; j++) {
+                    resolveBlockCollision(blocks[i], blocks[j]);
                 }
             }
+
+            // Physics sub-steps
+            const sub = 6;
+            for(let s=0; s<sub; s++) {
+                ball.vy += GRAVITY/sub; ball.x += ball.vx/sub; ball.y += ball.vy/sub;
+                lines.forEach(resolveBallLine);
+                const limitY = canvas.height - FLOOR_Y;
+                
+                // Floor Collision
+                ball.onGround = false;
+                if (ball.y > limitY - ball.radius) { 
+                    ball.y = limitY - ball.radius; ball.vy *= -0.3; ball.vx *= 0.97; ball.onGround = true; 
+                }
+                // Ceiling Collision (Atmospheric Boundary)
+                if (ball.y < ball.radius) {
+                    ball.y = ball.radius; ball.vy *= -0.5;
+                }
+                // Wall Collision
+                if (ball.x < ball.radius || ball.x > canvas.width-ball.radius) { 
+                    ball.vx *= -0.5; ball.x = ball.x < ball.radius ? ball.radius : canvas.width-ball.radius; 
+                }
+            }
+            ball.vx *= FRICTION_AIR; ball.vy *= FRICTION_AIR;
+
+            if (Math.sqrt((ball.x-goal.x)**2 + (ball.y-goal.y)**2) < goal.radius) {
+                const totalTime = (Date.now()-startTime)/1000;
+                showScoreCard(totalTime, strokes);
+            }
+            mouse.lx = mouse.x; mouse.ly = mouse.y;
         }
 
         function draw() {
-            ctx.fillStyle = '#1a1a2e';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#020617'; ctx.fillRect(0,0,canvas.width,canvas.height);
+            stars.forEach(s => { ctx.globalAlpha = s.o; ctx.fillStyle = "white"; ctx.fillRect(s.x, s.y, s.s, s.s); });
+            ctx.globalAlpha = 1.0;
 
-            drawBarriers();
-            drawBouncePad();
-            drawBall();
-            drawGoal();
-            drawLines();
+            // Ground Area
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0, canvas.height-FLOOR_Y, canvas.width, FLOOR_Y);
+            ctx.strokeStyle = '#334155'; ctx.lineWidth = 4;
+            ctx.beginPath(); ctx.moveTo(0, canvas.height-FLOOR_Y); ctx.lineTo(canvas.width, canvas.height-FLOOR_Y); ctx.stroke();
 
-            info.textContent = `⏱️ Time: ${((Date.now() - startTime) / 1000).toFixed(2)}s | 🖌️ Strokes: ${strokes}`;
-        }
+            // Massive Goal
+            ctx.shadowBlur = 30; ctx.shadowColor = '#10b981';
+            ctx.strokeStyle = '#34d399'; ctx.lineWidth = 4;
+            ctx.beginPath(); ctx.arc(goal.x, goal.y, goal.radius, 0, Math.PI*2); ctx.setLineDash([15,8]); ctx.stroke();
+            ctx.setLineDash([]); ctx.shadowBlur = 0;
 
-        function gameLoop() {
+            // Obstacles
+            blocks.forEach(b => {
+                ctx.save(); ctx.translate(b.x+b.w/2, b.y+b.h/2); ctx.rotate(b.angle);
+                ctx.fillStyle = '#1e293b'; ctx.strokeStyle = '#22d3ee';
+                ctx.beginPath(); ctx.roundRect(-b.w/2, -b.h/2, b.w, b.h, 8); ctx.fill(); ctx.stroke();
+                ctx.restore();
+            });
+
+            // Beams
+            lines.forEach(l => {
+                ctx.shadowBlur = 15; ctx.shadowColor = '#0ea5e9';
+                ctx.strokeStyle = '#67e8f9'; ctx.lineWidth = 5;
+                ctx.beginPath(); ctx.moveTo(l.x1, l.y1); ctx.lineTo(l.x2, l.y2); ctx.stroke();
+            });
+            ctx.shadowBlur = 0;
+
+            if (activeLine) {
+                ctx.strokeStyle = 'rgba(255,255,255,0.2)'; ctx.setLineDash([5,5]);
+                ctx.beginPath(); ctx.moveTo(activeLine.x1, activeLine.y1); ctx.lineTo(mouse.x, mouse.y); ctx.stroke(); ctx.setLineDash([]);
+            }
+
+            // Ball
+            ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI*2);
+            ctx.fillStyle = ball.onGround ? '#fbbf24' : '#f8fafc';
+            ctx.shadowBlur = 15; ctx.shadowColor = '#22d3ee'; ctx.fill(); ctx.shadowBlur = 0;
+
+            const t = gameResult ? gameResult.totalTime : (Date.now()-startTime)/1000;
+            const score = gameResult ? gameResult.score : Math.floor(t * (1 + strokes) * 100);
+            document.getElementById('m-time').innerText = `TIME: ${t.toFixed(2)}s`;
+            document.getElementById('m-strokes').innerText = `STROKES: ${strokes}`;
+            document.getElementById('m-score').innerText = `SCORE: ${score}`;
+            document.getElementById('m-beams').innerText = `BEAMS: ${lines.length}/3`;
+
             update();
-            draw();
-            requestAnimationFrame(gameLoop);
+            requestAnimationFrame(draw);
         }
 
-        function resetGame() {
-            ball = { x: 100, y: 100, radius: 10, vx: 0, vy: 0 };
-            lines = [];
-            randomGoal();
-            createBarriers();
-            startTime = Date.now();
-            strokes = 0;
+        function reset() {
+            ball = { x: 100, y: 100, radius: 14, vx: 0, vy: 0, onGround: false, mass: BALL_MASS };
+            lines = []; strokes = 0; startTime = Date.now(); gameWon = false; gameResult = null;
+            goal.vx = (Math.random() > 0.5 ? 1 : -1) * (0.8 + Math.random());
+            hideScoreCard();
+            createLevel();
         }
 
+        canvas.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
         canvas.addEventListener('mousedown', (e) => {
-            const rect = canvas.getBoundingClientRect();
-            const mouseX = e.clientX - rect.left;
-            const mouseY = e.clientY - rect.top;
-
-            isDrawing = true;
-            if (lines.length >= 3) {
-                lines.shift();
-            }
-
-            if (toolSelector.value === 'scribble') {
-                currentPath = [{x: mouseX, y: mouseY}];
-                lines.push(currentPath);
-            } else {
-                lines.push({ x1: mouseX, y1: mouseY, x2: mouseX, y2: mouseY });
-            }
-            strokes++;
+            if (Math.sqrt((e.clientX-ball.x)**2 + (e.clientY-ball.y)**2) < 50) return;
+            activeLine = { x1: e.clientX, y1: e.clientY };
         });
-
-        canvas.addEventListener('mousemove', (e) => {
-            if (!isDrawing) return;
-
-            const rect = canvas.getBoundingClientRect();
-            const mouseX = e.clientX - rect.left;
-            const mouseY = e.clientY - rect.top;
-
-            if (toolSelector.value === 'scribble') {
-                currentPath.push({x: mouseX, y: mouseY});
-            } else {
-                const currentLine = lines[lines.length - 1];
-                currentLine.x2 = mouseX;
-                currentLine.y2 = mouseY;
+        window.addEventListener('mouseup', (e) => {
+            if (activeLine) {
+                lines.push({ x1: activeLine.x1, y1: activeLine.y1, x2: e.clientX, y2: e.clientY });
+                if (lines.length > MAX_LINES) lines.shift();
+                activeLine = null;
             }
         });
+        restartBtn.addEventListener('click', reset);
 
-        canvas.addEventListener('mouseup', () => {
-            isDrawing = false;
-            currentPath = [];
-        });
-
-        randomGoal();
-        createBarriers();
-        gameLoop();
+        createLevel();
+        draw();
     </script>
 </body>
 </html>
