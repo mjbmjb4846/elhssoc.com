@@ -264,8 +264,9 @@ function createSitemap() {
         'Special Pages': [
             { name: 'New Members', url: `${rootPath}new.html`, icon: 'person-add-outline' },
             { name: 'Google Drive', url: `https://drive.elhssoc.com`, icon: 'logo-google' },
-            { name: 'Discord', url: `https://discord.elhssoc.com`, icon: 'logo-discord' },
-            { name: '2026 Rules', url: `https://www.soinc.org/form/2026-rules-c`, icon: 'document-outline' }
+            { name: 'Team Discord', url: `https://discord.elhssoc.com`, icon: 'logo-discord' },
+            { name: 'Club Bylaws', url: `${rootPath}/files/bylaws.pdf`, icon: 'document-text-outline' },
+            { name: '2027 Rules', url: `https://www.soinc.org/form/2027-rules-c`, icon: 'document-outline' }
         ],
         'Tournament Pages': [
             { name: 'Hawk and Hornet', url: `${rootPath}tournaments_/hawkandhornet.html`, icon: 'leaf-outline' },
@@ -277,7 +278,10 @@ function createSitemap() {
         ],
         'Development Features': [
             { name: 'Games Hub', url: `${rootPath}beta/games.html`, icon: 'game-controller-outline' },
-            { name: 'Protein Game', url: `${rootPath}beta/protein.html`, icon: 'fitness-outline' }
+            { name: 'Protein Game', url: `${rootPath}beta/protein.html`, icon: 'fitness-outline' },
+            { name: 'Golf Game', url: `${rootPath}beta/ballGame.html`, icon: 'planet-outline' },
+            { name: 'Catch Game', url: `${rootPath}beta/catchGame.html`, icon: 'ellipse-outline' },
+            { name: 'Clicker Game', url: `${rootPath}beta/clickerGame.html`, icon: 'bug-outline' }
         ],
     };
 
