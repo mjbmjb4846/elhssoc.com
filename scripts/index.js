@@ -270,10 +270,10 @@ function createSitemap() {
         ],
         'Tournament Pages': [
             { name: 'Hawk and Hornet', url: `${rootPath}tournaments_/hawkandhornet.html`, icon: 'leaf-outline' },
-            { name: 'Haslett', url: `${rootPath}tournaments_/haslett.html`, icon: 'flag-outline' },
+            //{ name: 'Haslett', url: `${rootPath}tournaments_/haslett.html`, icon: 'flag-outline' },
             { name: 'University of Michigan', url: `${rootPath}tournaments_/uofm.html`, icon: 'school-outline' },
             { name: 'Regionals', url: `${rootPath}tournaments_/regionals.html`, icon: 'medal-outline' },
-            { name: 'States', url: `${rootPath}tournaments_/stetes.html`, icon: 'star-outline' },
+            { name: 'States', url: `${rootPath}tournaments_/states.html`, icon: 'star-outline' },
             { name: 'Nationals', url: `${rootPath}tournaments_/nationals.html`, icon: 'trophy' }
         ],
         'Development Features': [
